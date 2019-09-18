@@ -1,0 +1,71 @@
+.drag-up-tr{
+    &>td {
+        padding-top: 18px;
+        transition: all linear 0.2s;
+    }
+}
+
+.drag-down-tr {
+    &>td {
+        padding-bottom: 18px;
+        transition: all linear 0.2s;
+    }
+}
+
+.drag-mid-tr {
+    &>td {
+        padding: 0;
+        transition: all linear 0.2s;
+    }
+}
+
+.drag-up-li:not([data-id="0"]),
+.drag-down-li:not([data-id="0"]),
+.drag-mid-li {
+
+    padding: 16px 0;
+    transition: all linear 0.2s;
+
+    &>span {
+        position: relative;
+    }
+
+    &>span:after {
+        content: " ";
+        position: absolute;
+        top: -5px;
+        right: -62px;
+        border: 1px solid #dedede;
+        border-radius: 5px;
+        font-size: 8px;
+        padding: 2px;
+        background: white;
+        z-index: 200;
+        transition: all .2s linear;
+    }
+}
+
+.drag-mid-li[data-id="0"] {
+    padding: 0;
+}
+
+.drag-up-li:not([data-id="0"]) {
+
+    &>span:after {
+        content: "移到上方";
+        top: -25px;
+    }
+}
+
+.drag-down-li:not([data-id="0"]) {
+    &>span:after {
+        content: "移到下方";
+        top: 20px;
+    }
+}
+
+.drag-mid-li {
+    &>span:after {
+        content: "移到内部";
+    }
+}

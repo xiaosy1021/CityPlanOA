@@ -1,0 +1,121 @@
+<template>
+  <Row>
+    <i-col span="5" offset="0" class="check">
+      <Tree :class="{active:isActive }"  ref="tree" :data="treedata" show-checkbox  :render="renderContent"></Tree>
+    </i-col>
+    <i-col span="3">
+      <div class="btn">
+        <i-button type="default" @click="onCheckAll">全选</i-button>
+        <i-button type="default" @click="onUnCheckAll">全不选</i-button>
+        <i-button type="default" class="" @click="onSaveToken" :disabled="!roleid">保存</i-button>
+      </div> 
+    </i-col>
+  </Row>
+</template>
+<script>
+import Server from "@/core/server";
+import { services } from "@/core/services";
+import { routerparams } from "@/core/mixins/routerp";
+import TreeStore from "../store/tree-store";
+export default {
+  mixins: [routerparams],
+  props: {
+    roleid: {
+      type: String,
+      default: ""
+    }
+  },
+  data() {
+    return {
+      isActive: true,
+      treedata: []
+    };
+  },
+  mounted() {
+    this.renderToken();
+  },
+  methods: {
+    //获取组件列表
+    renderToken(id) {
+      Server.get({
+        url:
+          services.getRoleFunQuery(this.AppId, this.IP) + id + "&functiontype=token"
+      }).then(rsp => {
+        if (rsp.status === 1) {
+          var changes = {
+            expand: true
+          };
+          this.treeStore = new TreeStore(rsp.data.rcds, changes);
+          this.treedata = this.treeStore.treeData;
+        } else {
+          Message.error(rsp.message);
+        }
+      });
+    },
+    //全选
+    onCheckAll() {
+      this.treeStore.checkedAll();
+    },
+    //全部不选
+    onUnCheckAll() {
+      this.treeStore.unCheckedAll();
+    },
+    renderContent(h, { root, node, data }) {
+      return h("span", data.label);
+    },
+    onSaveToken() {
+      var functionIds = [];
+      var _data1 = this.$refs.tree.getCheckedNodes();
+      for (var i in _data1) {
+        //遍历出json值的集合
+        functionIds.push(_data1[i].funId); //字符串组成数组
+      }
+      Server.post({
+        url: services.getRoleFunSet(this.AppId, this.IP),
+        params: {
+          params: JSON.stringify({
+            roleId: this.roleid,
+            functionType: "token",
+            functionIds: functionIds
+          })
+        }
+      }).then(rsp => {
+        if (status === 1) {
+        } else {
+          this.$Message.success("设置成功");
+        }
+      });
+    },
+    getCheckedNodes() {
+      return this.$refs.tree.getCheckedNodes();
+    }
+  },
+  components: {}
+};
+</script>
+<style lang="less" scoped>
+.check {
+  border: 1px dotted #ddd;
+  height: 400px;
+  min-width: 240px;
+  padding: 5px 10px 50px 10px;
+  overflow-y: scroll;
+}
+.btn {
+  margin: 60px 10px;
+}
+.btn button {
+  display: block;
+  margin: 5px 0;
+  width: 80px;
+}
+.ivu-tree ul li {
+  list-style: none;
+  margin: 4px 0;
+  padding: 0;
+  white-space: nowrap;
+  outline: 0;
+  width: 100%;
+  float: left;
+}
+</style>
