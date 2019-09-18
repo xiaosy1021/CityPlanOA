@@ -7,7 +7,7 @@
           <div class="layout-nav">
             <div class="titleHeader">
               <img class="logo" src="@/assets/img/logo/logo_sipsd.png">
-              <span class="title">一张图综合运维管理系统</span>
+              <span class="title">徐州经济技术开发区规划办文系统</span>
             </div>
             <div class="target">
               <MenuItem name="jcpz" :to="`/base/${IP}/${AppId}`">基础配置</MenuItem>
@@ -23,7 +23,7 @@
             <Dropdown :transfer="false" placement="bottom-end" @on-click="onUserItemClick">
               <div class="user-info">
                 <icon type="ios-contact" :size="20"/>
-                <span>欢迎您，{{userAccount}}</span>
+                <span>欢迎您，{{userName}}</span>
               </div>
               <DropdownMenu slot="list">
                 <DropdownItem name="exit" divided>
@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import { userAccount } from "@/core/const";
 import { routerparams } from "@/core/mixins/routerp";
 
 export default {
@@ -56,13 +55,13 @@ export default {
   data() {
     return {
       path: "",
-      userAccount: "管理员"
+      userName: "管理员"
     };
   },
   mounted() {
     let user = sessionStorage.getItem("userInfo");
     if (user) {
-      this.userAccount = JSON.parse(user).userAccount;
+      this.userName = JSON.parse(user).userName;
     }
   },
   methods: {
@@ -104,7 +103,7 @@ export default {
   width: 100%;
 }
 .titleHeader {
-  width: 250px;
+  width: 350px;
   font-size: 18px;
   float: left;
   margin-left: -25px;

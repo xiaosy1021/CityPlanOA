@@ -6,7 +6,7 @@
           style="width:45px;vertical-align:middle"
           src="@/assets/img/logo/logo_sipsd_blue.png"
         />
-        一张图综合运维管理系统
+        徐州经济技术开发区规划办文系统
       </h2>
     </div>
     <div class="content">
@@ -14,28 +14,6 @@
         :model="user"
         :rules="rules"
       >
-        <FormItem>
-          <AutoComplete
-            v-model="user.ip"
-            :data="ips"
-            :filter-method="filterMethod"
-            placeholder="格式：192.168.84.117:8003"
-            size="large"
-          ></AutoComplete>
-        </FormItem>
-        <FormItem prop="appid">
-          <Select
-            v-model="user.appid"
-            placeholder="请选择Appid"
-            @on-open-change="showSelect"
-          >
-            <Option
-              v-for="item in appidList"
-              :value="item.appId"
-              :key="item.id"
-            >{{ item.appId }}</Option>
-          </Select>
-        </FormItem>
         <FormItem prop="userAccount">
           <Input
             size="large"
@@ -48,7 +26,7 @@
             type="password"
             size="large"
             v-model="user.userPwd"
-            @on-enter="checkLogin"
+            @on-enter="loginSys"
             placeholder="请输入密码"
           />
         </FormItem>
@@ -58,7 +36,7 @@
           type="primary"
           long
           style="height:40px,font-size:15px;"
-          @click="checkLogin"
+          @click="loginSys"
         >登 录</Button>
       </div>
     </div>
@@ -71,47 +49,10 @@ import Server from "@/core/server";
 export default {
   mixins: [login],
   data() {
-    return {
-      appid: "",
-      appidList: [],
-      ips: []
-    };
+    return {};
   },
-  mounted() {
-    let autocompleteIPs = localStorage["autocompleteIPs"];
-    if (autocompleteIPs) {
-      let ipStored = JSON.parse(autocompleteIPs);
-      if (ipStored != null && ipStored.length > 0) {
-        this.ips = ipStored;
-      }
-    }
-  },
-  methods: {
-    onChange() {
-      this.appidList = [];
-      if (this.user.ip) {
-        Server.get({
-          url: `http://${this.user.ip}/onemapsrv/admin/App/Query/`,
-          params: {
-            appids: ""
-          }
-        }).then(rsp => {
-          if (rsp) {
-            this.appidList = rsp.data.rcds;
-          }
-        });
-      }
-    },
-    filterMethod(value, option) {
-      return option.indexOf(value) !== -1;
-    },
-    showSelect(value) {
-      if (value === true && this.lastIP != this.user.ip) {
-        this.lastIP = this.user.ip;
-        this.onChange();
-      }
-    }
-  }
+  mounted() {},
+  methods: {}
 };
 </script>
 

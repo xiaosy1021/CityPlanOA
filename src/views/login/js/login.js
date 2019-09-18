@@ -4,17 +4,17 @@ import Server from "@/core/server";
 import {
     services
 } from "@/core/services";
+
 export const login = {
     data() {
         return {
             user: {
-                ip: "",
-                appid: "",
-                // eslint-disable-next-line
+                ip: "122.193.33.86:8006",
+                appid: "SX_KJXX",
+
                 userAccount: "",
-                // eslint-disable-next-line
                 userPwd: "",
-                remember: false
+                // remember: false
             },
             rules: {
                 userAccount: [{
@@ -32,34 +32,26 @@ export const login = {
         };
     },
     methods: {
-        checkLogin() {
+        loginSys() {
             this.loading = true;
             Server.post({
-                url: `http://${this.user.ip}/onemapsrv/admin/Login/`,
+                url: services.sys.login,
                 params: {
-                    params: JSON.stringify({
-                        appid: this.user.appid,
-                        userAccount: this.user.userAccount,
-                        password: this.user.userPwd
-                    })
+                    username: this.user.userAccount,
+                    pwd: this.user.userPwd
                 }
             }).then(rsp => {
                 if (rsp.status === 1) {
                     this.$Message.success("登录成功");
-                    sessionStorage.setItem("userInfo", JSON.stringify(this.user));
+                    sessionStorage.setItem("userInfo", JSON.stringify(rsp.data.userInfo));
+
+                    // var aaa = JSON.parse(sessionStorage.getItem("userInfo"));
+                    // console.log(aaa);
+                    
                     this.$router.push({
                         path: `/main/${this.user.ip}/${this.user.appid}`
                     });
 
-                    let autocompleteIPs = localStorage["autocompleteIPs"];
-                    if (!autocompleteIPs) {
-                        autocompleteIPs = "[]";
-                    }
-                    let ips = JSON.parse(autocompleteIPs);
-                    if (ips.includes(this.user.ip) === false) {
-                        ips.push(this.user.ip);
-                        localStorage["autocompleteIPs"] = JSON.stringify(ips);
-                    }
                 } else {
                     this.$Message.error(rsp.message);
                 }

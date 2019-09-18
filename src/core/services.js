@@ -1,31 +1,22 @@
-// var user = null || JSON.parse(sessionStorage.getItem("userInfo"))
-var newbaseUrl = "";
-var AppId = "";
-var IP = "";
-var OcelotEditorUrl = "";
-// if (user != null) {
-//   var IP = user.ip;
-//   var AppId = user.appid;
-//   var newbaseUrl = `http://${IP}/onemapsrv/admin/`;
-// }
-export const AppId = AppId || "";
-// var OcelotEditorUrl = `http://${OcelotEditorIP}/ConfigEditor/`; //接口url
+import {
+  CONSTCFG
+} from "./const";
 
-// //地图审核管理模块
-var mapCheckbaseUrl = `http://${IP}/onemapsrv/Srv/MapLayer/`;
+var IP = CONSTCFG.IP;
+var AppId = CONSTCFG.AppId;
 
 export const services = {
-
-  //登陆地址
-  login: `http://192.168.84.24:12345/onemapsrv/login?appid=ams`,
-  //本地json数据--menu
-  menu: `static/json/menu.json`,
-  //运维独立服务
-  grid(name) {
-    return newbaseUrl + `${name}/Query?appid=${AppId}`;
+  sys: {
+    login: `http://${IP}/onemapsrv/login?appid=${AppId}`,
   },
-  //登录模块
-  Login: newbaseUrl + 'Login',
+
+
+
+
+
+
+  
+
   //统计模块
   Getnumbers(AppId, IP) {
     return `http://${IP}/onemapsrv/admin/Statistics/Base?appid=${AppId}`;
@@ -315,19 +306,6 @@ export const services = {
   getRoleFunSet(AppId, IP) {
     return `http://${IP}/onemapsrv/admin/RoleFun/Set`;
   },
-  // Tabquery: newbaseUrl + `RoleFun/Query?appid=${AppId}&roleid=`, //tab查询
-  // Tabexecute: newbaseUrl + `RoleFun/Set`, //tab设置
-  //网关模块
-
-  GetGateway: OcelotEditorUrl + `GetOcelotSection?name=${AppId}`, //网关查询
-  // GetGateway: OcelotEditorUrl + `GetAllOcelotSections`, //全部网关查询
-  RestartGateWay: OcelotEditorUrl + `ReBuiltOcelotConfiguration`, //网关重启
-  SaveGateWay: OcelotEditorUrl + `SaveOcelotSection`, //保存网关
-  Validate: OcelotEditorUrl + "ValidateOcelotSection", //验证方法
-  //地图申请审核模块
-  CheckList: mapCheckbaseUrl + `CheckList`, //地图申请待审核列表
-  Check: mapCheckbaseUrl + `Check`, //审核
-  //HasCheckList: mapCheckbaseUrl + `HasCheckList?` //已审核
 
   //应用管理模块
   getAppList(AppId, IP) {
