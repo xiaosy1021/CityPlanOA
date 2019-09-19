@@ -3,13 +3,12 @@ export const routerparams = {
     data() {
         return {
             IP: "",
-            AppId: ""
-
+            AppId: "",
         };
     },
     mounted() {
-        this.IP = this.$route.params.IP;
-        this.AppId = this.$route.params.AppId;
+        this.IP = this.$route.params.IP || "122.193.33.86:8006";
+        this.AppId = this.$route.params.AppId || "SX_KJXX";
     },
     methods: {
         convertRouterPath(path){

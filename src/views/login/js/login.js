@@ -9,9 +9,6 @@ export const login = {
     data() {
         return {
             user: {
-                ip: "122.193.33.86:8006",
-                appid: "SX_KJXX",
-
                 userAccount: "",
                 userPwd: "",
                 // remember: false
@@ -42,14 +39,15 @@ export const login = {
                 }
             }).then(rsp => {
                 if (rsp.status === 1) {
-                    this.$Message.success("登录成功");
+                    // this.$Message.success("登录成功");
                     sessionStorage.setItem("userInfo", JSON.stringify(rsp.data.userInfo));
 
                     // var aaa = JSON.parse(sessionStorage.getItem("userInfo"));
                     // console.log(aaa);
-                    
+
                     this.$router.push({
-                        path: `/main/${this.user.ip}/${this.user.appid}`
+                        // path: `/main/${this.user.ip}/${this.user.appid}`
+                        path: `/main`
                     });
 
                 } else {

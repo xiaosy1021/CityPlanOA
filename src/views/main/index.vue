@@ -9,15 +9,14 @@
               <img class="logo" src="@/assets/img/logo/logo_sipsd.png">
               <span class="title">徐州经济技术开发区规划办文系统</span>
             </div>
-            <div class="target">
+            <!-- <div class="target">
               <MenuItem name="jcpz" :to="`/base/${IP}/${AppId}`">基础配置</MenuItem>
               <MenuItem name="sjpz" :to="`/data/${IP}/${AppId}`">数据配置</MenuItem>
               <MenuItem name="zypz" :to="`/resource/${IP}/${AppId}`">资源配置</MenuItem>
               <MenuItem name="gnpz" :to="`/function/${IP}/${AppId}`">功能配置</MenuItem>
               <MenuItem name="zysh" :to="`/examine/${IP}/${AppId}`">资源审核</MenuItem>
               <MenuItem name="wggl" :to="`/gataway/${IP}/${AppId}`">网关管理</MenuItem>
-              <!-- <MenuItem name="yygl" :to="`/application/${IP}/${AppId}`">应用管理</MenuItem> -->
-            </div>
+            </div> -->
           </div>
           <div class="user-tools">
             <Dropdown :transfer="false" placement="bottom-end" @on-click="onUserItemClick">
