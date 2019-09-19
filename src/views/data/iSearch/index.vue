@@ -10,7 +10,7 @@
       </Table>
     </div>
     <div class="foot-page">
-      <Page :total="total" :page-size="pageSize" show-total @on-change="handlePage"  show-sizer></Page>
+      <Page :total="total" :page-size="pageSize" show-total @on-change="handlePage"  show-sizer  show-elevator ></Page>
     </div>
     <Modal v-model="showDialog" :mask-closable="false" width="680" title="List模板">
       <i-search-form ref="iSearchForm" />

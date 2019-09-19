@@ -69,7 +69,17 @@ export default new Router({
             },
             component: () =>
               import('@/views/data/Grid/index.vue')
-          }]
+          }, {
+            path: '/data/iSearch',
+            meta: {
+              name: '单位信息',
+              menuKey: '1-4',
+              auth: true
+            },
+            component: () =>
+              import('@/views/data/iSearch/index.vue')
+          }
+        ]
         },
         {
           path: '/base',
