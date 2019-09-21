@@ -4,10 +4,15 @@ import {
 
 var IP = CONSTCFG.IP;
 var AppId = CONSTCFG.AppId;
+var SrvIP = CONSTCFG.SrvIP;
 
 export const services = {
   sys: {
     login: `http://${IP}/onemapsrv/login?appid=${AppId}`,
+  },
+
+  company:{
+    url:`http://${SrvIP}/companies`,
   },
 
 

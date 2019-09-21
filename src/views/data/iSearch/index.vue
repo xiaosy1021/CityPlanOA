@@ -10,7 +10,7 @@
       </Table>
     </div>
     <div class="foot-page">
-      <Page :total="total" :page-size="pageSize" show-total @on-change="handlePage"  show-sizer  show-elevator ></Page>
+      <Page :total="total" :page-size="pageSize" show-total @on-change="pageChanged" @on-page-size-change="pageSizeChanged" show-sizer show-elevator></Page>
     </div>
     <Modal v-model="showDialog" :mask-closable="false" width="680" title="List模板">
       <i-search-form ref="iSearchForm" />
@@ -52,11 +52,12 @@
         templateName: "",
         searchTemplateName: "",
         currentRowId: "",
-        pageNum: 1,
+        pageIndex: 1,
         pageSize: 10,
         total: 0,
         table: {
           columns: [{
+              title: "序号",
               type: "index",
               width: 60,
               align: "center"
@@ -65,55 +66,60 @@
             {
               title: "模板",
               key: "templateName",
+              width: 300,
               sortable: true,
               align: "center"
             },
             {
               title: "表名",
               key: "tableName",
+              width: 300,
               align: "center"
             },
             {
               title: "关键字",
               key: "keyId",
+              width: 100,
               align: "center"
             },
             {
               title: "名称",
               key: "keyName",
+              width: 100,
               align: "center"
             },
             {
               title: "类别",
               key: "categoryName",
+              width: 200,
               align: "center"
             },
             {
               title: "图形",
               key: "geoType",
-              maxWidth: 80,
+              width: 80,
               align: "center"
             },
             {
               title: "其他数据源",
               key: "dataAppid",
+              width: 150,
               align: "center"
             },
 
             {
               title: "是否显示图形要素",
               key: "shape",
-              maxWidth: 90,
+              width: 200,
               align: "center",
               render: (h, params) => {
                 return renderHelper.renderTagForTable(h, params.row.shape);
               }
             },
-
             {
               title: "操作",
               key: "action",
-              maxWidth: 150,
+              width: 150,
               align: "center",
               render: (h, params) => {
                 return renderHelper.renderDefaultOpterForTable(
@@ -122,12 +128,13 @@
                   this.onEdit,
                   this.onDelete
                 );
-              }
+              },
+              fixed: 'right'
             },
             {
               title: "属性配置",
               key: "action",
-              maxWidth: 90,
+              width: 100,
               align: "center",
               render: (h, params) => {
                 return renderHelper.renderConfigButtonForTable(
@@ -135,30 +142,41 @@
                   params,
                   this.onEditProp
                 );
-              }
+              },
+              fixed: 'right'
+            },
+            //多配置一个title为空格的列，以用于填充空白区域（列数较少时需要）
+            {
+              title: " ",
+              key: "",
+              align: "center",
             }
           ],
           data: []
         }
       };
     },
-    activated() {
-      this.searchTemplateName = this.$route.query.templateName || "";
-      this.getTable();
-    },
+    // activated() {
+    //   this.searchTemplateName = this.$route.query.templateName || "";
+    //   this.loadTable();
+    // },
     mounted() {
       this.searchTemplateName = this.$route.query.templateName || "";
-      this.getTable();
+      this.loadTable();
     },
     methods: {
-      handlePage(value) {
-        this.pageNum = value;
-        this.getTable();
+      pageChanged(value) {
+        this.pageIndex = value;
+        this.loadTable();
       },
-      getTable() {
+      pageSizeChanged(value){
+        this.pageSize =value;
+        this.loadTable();
+      },
+      loadTable() {
         this.isLoading = true;
         let templateName = this.searchTemplateName;
-        let pageNumber = this.pageNum;
+        let pageNumber = this.pageIndex;
         let pageSize = this.pageSize;
         Server.get({
           url: services.getQueryListTmplQuery(this.AppId, this.IP) +
@@ -175,12 +193,12 @@
       },
       //刷新
       onRefresh() {
-        this.getTable();
+        this.loadTable();
       },
       //查询
       onSearch() {
-        this.pageNum = 1;
-        this.getTable();
+        this.pageIndex = 1;
+        this.loadTable();
       },
       //新增
       onAdd() {

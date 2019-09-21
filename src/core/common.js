@@ -70,9 +70,9 @@ export const renderHelper = {
             })
         ]);
     },
-    //渲染一个配置按钮
+    //渲染一个相关按钮
     renderConfigButtonForTable(h, params, func) {
-        return this.renderSingleButtonForTable(h, params, func, "配置", "md-build");
+        return this.renderSingleButtonForTable(h, params, func, "相关申请", "md-link");
     },
     //渲染一个绑定按钮
     renderBindButtonForTable(h, params, func) {
@@ -82,7 +82,7 @@ export const renderHelper = {
     renderActionButtonForTable(h, params, func) {
         return this.renderSingleButtonForTable(h, params, func, "跳转", "md-share-alt");
     },
-    //渲染默认的操作按钮，修改+删除
+    //渲染默认的操作按钮，编辑+删除
     renderDefaultOpterForTable(h, params, editFunc, removeFunc) {
         return h("div", [
             h("i-button", {
@@ -92,7 +92,7 @@ export const renderHelper = {
 
                 },
                 domProps: {
-                    title: "修改"
+                    title: "编辑"
                 },
                 style: {
                     marginRight: "5px"

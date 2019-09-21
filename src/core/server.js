@@ -29,6 +29,48 @@ export default class Server {
     });
   }
 
+  static postJSON(opt) {
+    return new Promise((resolve, reject) => {
+      this.setInitAxios();
+
+      Axios.post(encodeURI(opt.url), opt.params || {}, {
+          headers: opt.headers || {}
+        })
+        .then(function (rsp) {
+          rsp.data.netStatus = rsp.status;
+          resolve(rsp.data);
+        }).catch(err => {
+          reject({
+            netStatus: err.status,
+            status: 0,
+            message: "请求超时"
+          });
+        });
+    });
+  }
+
+  static delete(opt){
+    return new Promise((resolve, reject) => {
+      this.setInitAxios();
+
+      Axios.delete(encodeURI(opt.url), opt.params || {}, {
+          headers: opt.headers || {}
+        })
+        .then(function (rsp) {
+          rsp.data.netStatus = rsp.status;
+          resolve(rsp.data);
+        }).catch(err => {
+          reject({
+            netStatus: err.status,
+            status: 0,
+            message: "请求超时"
+          });
+        });
+    });
+  }
+
+
+
   static setInitAxios(timeout) {
     if (!timeout) {
       Axios.defaults.timeout = 5000;
