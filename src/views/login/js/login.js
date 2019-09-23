@@ -29,7 +29,15 @@ export const login = {
         };
     },
     methods: {
-        loginSys() {
+        checkLogin(name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    this.login();
+                }
+            })
+        },
+
+        login() {
             this.loading = true;
             Server.post({
                 url: services.sys.login,
@@ -54,7 +62,6 @@ export const login = {
                     this.$Message.error(rsp.message);
                 }
             });
-
         }
     }
 };

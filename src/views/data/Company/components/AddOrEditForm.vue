@@ -1,11 +1,11 @@
 <template>
-    <Form :model="form" :label-width="80">
+    <Form ref="frmCompany" :model="form" :rules="rules" :label-width="80">
         <Row>
             <Col span="11">
-            <FormItem label="单位名称:"><Input v-model="form.name" placeholder="单位名称" /></FormItem>
+            <FormItem label="单位名称:" prop="name"><Input v-model="form.name" placeholder="单位名称" /></FormItem>
             </Col>
             <Col span="11" offset="2">
-            <FormItem label="单位代码:"><Input v-model="form.companyNo" placeholder="单位代码" /></FormItem>
+            <FormItem label="单位代码:" prop="companyNo"><Input v-model="form.companyNo" placeholder="单位代码" /></FormItem>
             </Col>
         </Row>
         <Row>
@@ -51,7 +51,19 @@
                     postCode: "",
                     phone: "",
                     fax: ""
-                }
+                },
+                rules: {
+                    name: [{
+                        required: true,
+                        message: "单位名称不能为空",
+                        trigger: "blur"
+                    }],
+                    companyNo: [{
+                        required: true,
+                        message: "单位代码不能为空",
+                        trigger: "blur"
+                    }]
+                },
             };
         },
         methods: {
@@ -80,7 +92,7 @@
 
             getForm() {
                 return {
-                    id: this.form.id,
+                    id: this.form.id == "" ? 0 : this.form.id,
                     name: this.form.name,
                     companyNo: this.form.companyNo,
                     contactor: this.form.contactor,

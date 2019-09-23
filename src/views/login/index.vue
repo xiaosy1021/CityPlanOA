@@ -10,7 +10,7 @@
       </h2>
     </div>
     <div class="content">
-      <Form
+      <Form ref="frmLogin"
         :model="user"
         :rules="rules"
       >
@@ -26,7 +26,7 @@
             type="password"
             size="large"
             v-model="user.userPwd"
-            @on-enter="loginSys"
+            @on-enter="checkLogin('frmLogin')"
             placeholder="请输入密码"
           />
         </FormItem>
@@ -36,7 +36,7 @@
           type="primary"
           long
           style="height:40px,font-size:15px;"
-          @click="loginSys"
+          @click="checkLogin('frmLogin')"
         >登 录</Button>
       </div>
     </div>

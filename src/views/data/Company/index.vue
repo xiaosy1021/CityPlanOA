@@ -226,7 +226,7 @@
                         content: "确定删除该记录?",
                         onOk: () => {
                             Server.delete({
-                                url: services.company.url+"/"+currentRow.id
+                                url: services.company.url + "/" + currentRow.id
                             }).then(rsp => {
                                 if (rsp.success == true) {
                                     this.$Message.success("删除成功");
@@ -252,22 +252,26 @@
             },
             //保存
             onSave() {
-                let form = this.$refs.frmAddOrEdit.getForm();
-                Server.postJSON({
-                    url: services.company.url,
-                    params: JSON.stringify(form),
-                    headers: {
-                        'Content-Type': "application/json;charset=utf-8"
+                this.$refs.frmAddOrEdit.$refs['frmCompany'].validate((valid) => {
+                    if (valid) {
+                        let form = this.$refs.frmAddOrEdit.getForm();
+                        Server.postJSON({
+                            url: services.company.url,
+                            params: JSON.stringify(form),
+                            headers: {
+                                'Content-Type': "application/json-patch+json"
+                            }
+                        }).then(rsp => {
+                            if (rsp.success === true) {
+                                this.$Message.success("操作成功");
+                                this.onRefresh();
+                                this.showDialog = false;
+                            } else {
+                                this.$Message.error(rsp.message);
+                            }
+                        });
                     }
-                }).then(rsp => {
-                    if (rsp.success === true) {
-                        this.$Message.success("操作成功");
-                        this.onRefresh();
-                        this.showDialog = false;
-                    } else {
-                        this.$Message.error(rsp.message);
-                    }
-                });
+                })
             },
 
             //取消

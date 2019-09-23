@@ -17,7 +17,7 @@
 var _CONSTCFG = {
     AppId: "SX_KJXX",
     IP: "122.193.33.86:8006",
-    SrvIP: "192.168.84.124:8031"
+    SrvIP: "192.168.84.124:8098"
 };
 
 export const CONSTCFG = _CONSTCFG;
