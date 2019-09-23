@@ -15,6 +15,13 @@ export const services = {
     url:`http://${SrvIP}/companies`,
   },
 
+  project:{
+    url:`http://${SrvIP}/projects`,
+  },
+
+  dictionary:{
+    url:`http://192.168.84.124/OpenAuthForQinzhou/API/AuthQuery/GetDataDictionary`,
+  },
 
 
 

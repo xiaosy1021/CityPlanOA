@@ -7,7 +7,7 @@
         办文管理
       </template>
       <MenuItem name="1-1" :to="`/data/EmailMsgTmpl`">项目集</MenuItem>
-      <MenuItem name="1-2" :to="`/data/shortMsgTmpl`">项目信息</MenuItem>
+      <MenuItem name="1-2" :to="`/data/Project`">项目信息</MenuItem>
       <MenuItem name="1-3" :to="`/data/Grid`">申请信息</MenuItem>
       <MenuItem name="1-4" :to="`/data/Company`">单位信息</MenuItem>
       <MenuItem name="1-5" :to="`/data/iSearch`">文档信息</MenuItem>

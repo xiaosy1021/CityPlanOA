@@ -50,14 +50,14 @@ export default new Router({
             component: () =>
               import('@/views/data/EmailMsgTmpl/index.vue')
           }, {
-            path: '/data/shortMsgTmpl',
+            path: '/data/Project',
             meta: {
               name: '项目信息',
               menuKey: '1-2',
               auth: true
             },
             component: () =>
-              import('@/views/data/shortMsgTmpl/index.vue')
+              import('@/views/data/Project/index.vue')
           }, {
             path: '/data/Grid',
             meta: {
