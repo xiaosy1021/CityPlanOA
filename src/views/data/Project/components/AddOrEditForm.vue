@@ -48,7 +48,7 @@
     data() {
       return {
         form: {
-          id: "",
+          id: -1,
           name: "",
           projectNo: "",
           location: "",
@@ -57,8 +57,8 @@
           landusageCode: "R2",
           landusage: "R2 二类居住用地",
           landArea: 98,
-          projectTypeCode: "建筑物",
-          projectSubTypeCode: "住宅/宿舍/公寓",
+          projectTypeCode: "",
+          projectSubTypeCode: "",
           ownerCompanyId: 9,
           constructionCompanyId: 9
         },
@@ -102,7 +102,7 @@
 
             this.getProjTypeTree();
             this.getLandusageTree();
-            
+
           } else {
             this.$Message.error("获取字典信息失败！");
           }
@@ -126,7 +126,7 @@
         })
       },
 
-      getLandusageTree(){
+      getLandusageTree() {
         this.dataDictionary.forEach(v => {
           if (v.ParentCode == "322013000") {
 
@@ -184,21 +184,46 @@
       },
 
       getForm() {
-        return {
-          // id: this.form.id == "" ? 0 : this.form.id,
-          name: this.form.name,
-          projectNo: this.form.projectNo,
-          location: this.form.location,
-          content: this.form.content,
+                debugger;
+        if (this.valueProjType.length > 1) {
+          this.form.projectTypeCode = this.valueProjType[0];
+          this.form.projectSubTypeCode = this.valueProjType[1];
+        }
+                debugger;
 
-          projectTypeCode: this.form.projectTypeCode,
-          projectSubTypeCode: this.form.projectSubTypeCode,
-          ownerCompanyId: this.form.ownerCompanyId,
-          constructionCompanyId: this.form.constructionCompanyId,
-          landusageCode: this.form.landusageCode,
-          landusage: this.form.landusage,
-          landArea: this.form.landArea,
-        };
+        if (this.form.id < 0) {
+                  debugger;
+          return {
+            name: this.form.name,
+            projectNo: this.form.projectNo,
+            location: this.form.location,
+            content: this.form.content,
+
+            projectTypeCode: this.form.projectTypeCode,
+            projectSubTypeCode: this.form.projectSubTypeCode,
+            ownerCompanyId: this.form.ownerCompanyId,
+            constructionCompanyId: this.form.constructionCompanyId,
+            landusageCode: this.form.landusageCode,
+            landusage: this.form.landusage,
+            landArea: this.form.landArea,
+          };
+        } else {
+          return {
+            id: this.form.id,
+            name: this.form.name,
+            projectNo: this.form.projectNo,
+            location: this.form.location,
+            content: this.form.content,
+
+            projectTypeCode: this.form.projectTypeCode,
+            projectSubTypeCode: this.form.projectSubTypeCode,
+            ownerCompanyId: this.form.ownerCompanyId,
+            constructionCompanyId: this.form.constructionCompanyId,
+            landusageCode: this.form.landusageCode,
+            landusage: this.form.landusage,
+            landArea: this.form.landArea,
+          };
+        }
       }
     }
   };
