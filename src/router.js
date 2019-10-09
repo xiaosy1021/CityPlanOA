@@ -1,22 +1,47 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import main from './views/main/index.vue'
-import login from './views/login/index.vue'
+// import login from './views/login/index.vue'
+
+import store from '@/store'
+import { vuexOidcCreateRouterMiddleware } from 'vuex-oidc'
+
+import SigninCallback from '@/oidc/signincallback'
+import SigninCallbackError from '@/oidc/signincallbackerror'
+
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes: [{
       path: '/',
-      redirect: "/login"
-    }, {
-      path: '/login',
-      component: login,
-      meta: {
-        auth: false,
-      }
+      redirect: "/main",
     },
+    {
+      path: '/signincallback',
+      name: 'signincallback',
+      meta: {
+        isOidcCallback: true,
+        isPublic: true
+      },
+      component: SigninCallback
+    },
+    {
+      path: '/signincallbackerror',
+      name: 'signincallbackerror',
+      meta: {
+        isPublic: true
+      },
+      component: SigninCallbackError
+    },
+    // {
+    //   path: '/login',
+    //   component: login,
+    //   meta: {
+    //     auth: false,
+    //   }
+    // },
     {
       path: '/main',
       component: main,
@@ -87,8 +112,7 @@ export default new Router({
             },
             component: () =>
               import('@/views/data/iSearch/index.vue')
-          }
-        ]
+          }]
         },
         {
           path: '/base',
@@ -138,7 +162,8 @@ export default new Router({
         },
       ]
     }
-
-
   ]
 })
+
+router.beforeEach(vuexOidcCreateRouterMiddleware(store, 'oidcStore'))
+export default router

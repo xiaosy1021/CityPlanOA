@@ -10,20 +10,24 @@ Vue.use(iView, {
   transfer: true
 })
 router.beforeEach((to, from, next) => {
-  var auth = to.meta.auth || null;
-  if (auth === true) {
-    var isLogin = sessionStorage.getItem("userInfo") || null;
-    if (isLogin === null) {
-      next({
-        path: '/login'
-      });
-      return;
-    } else {
-      next()
-    }
-  } else {
-    next()
-  }
+  // var auth = to.meta.auth || null;
+  // if (auth === true) {
+  //   debugger;
+  //   var isLogin = sessionStorage.getItem("userInfo") || null;
+  //   if (isLogin === null) {
+  //     next({
+  //       path: '/login'
+  //     });
+  //     return;
+  //   } else {
+  //     next()
+  //   }
+  // } else {
+  //   next()
+  // }
+  next();
+
+  
   //选中一级菜单
   if (to.matched[1] && to.matched[1].meta.menuKey) {
     store.commit("setMainMenuKey", to.matched[1].meta.menuKey);
