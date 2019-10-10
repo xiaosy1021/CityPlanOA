@@ -186,7 +186,7 @@
         let pageSize = this.pageSize;
 
         Server.get({
-          url: services.project.url +
+          url: services.data.project +
             `?name=${projectName}&projectType=${projectType}&page=${pageIndex}&pageSize=${pageSize}`
         }).then(rsp => {
           this.isLoading = false;
@@ -233,7 +233,7 @@
             content: "确定删除该记录?",
             onOk: () => {
               Server.delete({
-                url: services.project.url + "/" + currentRow.id
+                url: services.data.project + "/" + currentRow.id
               }).then(rsp => {
                 if (rsp.success == true) {
                   this.$Message.success("删除成功");
@@ -265,7 +265,7 @@
             let form = this.$refs.frmAddOrEdit.getForm();
             debugger;
             Server.postJSON({
-              url: services.project.url,
+              url: services.data.project,
               params: JSON.stringify(form),
               headers: {
                 'Content-Type': "application/json-patch+json"

@@ -179,7 +179,7 @@
                 let pageSize = this.pageSize;
 
                 Server.get({
-                    url: services.company.url +
+                    url: services.data.company +
                         `?name=${companyName}&CompanyNo=${companyCode}&page=${pageIndex}&pageSize=${pageSize}`
                 }).then(rsp => {
                     this.isLoading = false;
@@ -226,7 +226,7 @@
                         content: "确定删除该记录?",
                         onOk: () => {
                             Server.delete({
-                                url: services.company.url + "/" + currentRow.id
+                                url: services.data.company + "/" + currentRow.id
                             }).then(rsp => {
                                 if (rsp.success == true) {
                                     this.$Message.success("删除成功");
@@ -256,7 +256,7 @@
                     if (valid) {
                         let form = this.$refs.frmAddOrEdit.getForm();
                         Server.postJSON({
-                            url: services.company.url,
+                            url: services.data.company,
                             params: JSON.stringify(form),
                             headers: {
                                 'Content-Type': "application/json-patch+json"

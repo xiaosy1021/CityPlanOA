@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { vuexOidcCreateStoreModule } from 'vuex-oidc'
+import env from './global'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -21,22 +22,7 @@ export default new Vuex.Store({
   },
   modules: {
     oidcStore: vuexOidcCreateStoreModule(
-      {
-        authority: 'http://192.168.84.124:8610',
-        client_id: 'xuzhouoa-js',
-        client_secret: 'secret',
-        response_type: 'code',
-        scope: 'openid xuzhou-oa-fullaccess',
-        loadUserInfo: true,
-        revokeAccessTokenOnSignout: true,
-        redirect_uri: window.document.location.origin + '/#/signincallback',
-        silent_redirect_uri: window.document.location.origin + '/#/silentcallback',
-        post_logout_redirect_uri: '',
-        automaticSilentRenew: true
-        // userStore: new oidc.WebStorageStateStore({
-        //   store: window.localStorage
-        // })
-      },
+      env.oidcSettings,
       {
         namespaced: true,
         dispatchEventsOnWindow: true

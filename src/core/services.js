@@ -10,13 +10,9 @@ export const services = {
   sys: {
     login: `http://${IP}/onemapsrv/login?appid=${AppId}`,
   },
-
-  company:{
-    url:`http://${SrvIP}/companies`,
-  },
-
-  project:{
-    url:`http://${SrvIP}/projects`,
+  data:{
+    company:`http://${SrvIP}/companies`,
+    project:`http://${SrvIP}/projects`,
   },
 
   dictionary:{
