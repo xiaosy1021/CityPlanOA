@@ -17,7 +17,13 @@
 var _CONSTCFG = {
     AppId: "SX_KJXX",
     IP: "122.193.33.86:8006",
-    SrvIP: "192.168.84.124:8098"
+    SrvIP: "192.168.84.124:8098",
+
+    //项目类型 级联选择
+    DataProjType: [],
+    //用地性质 级联选择
+    DataLandusage: [],
+
 };
 
 export const CONSTCFG = _CONSTCFG;

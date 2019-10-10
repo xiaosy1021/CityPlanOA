@@ -83,36 +83,42 @@
                             title: "单位代码",
                             key: "companyNo",
                             width: 120,
+                            sortable: true,
                             align: "center"
                         },
                         {
                             title: "联系人",
                             key: "contactor",
                             width: 120,
+                            sortable: true,
                             align: "center"
                         },
                         {
                             title: "地址",
                             key: "address",
                             width: 300,
+                            sortable: true,
                             align: "center"
                         },
                         {
                             title: "邮编",
                             key: "postCode",
                             width: 200,
+                            sortable: true,
                             align: "center"
                         },
                         {
                             title: "联系电话",
                             key: "phone",
                             width: 150,
+                            sortable: true,
                             align: "center"
                         },
                         {
                             title: "传真",
                             key: "fax",
                             width: 150,
+                            sortable: true,
                             align: "center"
                         },
 

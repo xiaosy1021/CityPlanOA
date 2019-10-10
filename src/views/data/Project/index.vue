@@ -4,7 +4,11 @@
       <span>项目名称：</span>
       <Input class="search-input-default" clearable v-model="searchProjectName" @on-enter="onSearch" />
       <span>项目类型：</span>
-      <Input class="search-input-default" clearable v-model="searchProjectType" @on-enter="onSearch" />
+      <!-- <Input class="search-input-default" clearable v-model="searchProjectType" @on-enter="onSearch" /> -->
+
+      <Select v-model="searchProjectType" class="search-input-default" style="width:200px">
+        <Option v-for="item in dataProjType" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      </Select>
 
       <search-buttons @on-search="onSearch" @on-refresh="onRefresh" @on-add="onAdd"></search-buttons>
     </div>
@@ -33,6 +37,9 @@
     services
   } from "@/core/services";
   import {
+    CONSTCFG
+  } from "@/core/const";
+  import {
     computeh
   } from "@/core/computeh";
   import {
@@ -60,6 +67,8 @@
 
         searchProjectName: "",
         searchProjectType: "",
+
+        dataProjType: [],
 
         pageIndex: 1,
         pageSize: 10,
@@ -99,13 +108,13 @@
             },
             {
               title: "项目类型",
-              key: "projectTypeCode",
+              key: "projectTypeName",
               width: 200,
               align: "center"
             },
             {
               title: "项目子类型",
-              key: "projectSubTypeCode",
+              key: "projectSubTypeName",
               width: 150,
               align: "center"
             },
@@ -163,7 +172,16 @@
         }
       }
     },
-    created() {},
+    created() {
+      this.dataProjType.push({
+        value: "all",
+        label: "-- 全部 --"
+      });
+
+      for (var i = 0; i < CONSTCFG.DataProjType.length; i++) {
+        this.dataProjType.push(CONSTCFG.DataProjType[i]);
+      }
+    },
     mounted() {
       this.loadTable();
     },
@@ -181,7 +199,7 @@
       loadTable() {
         this.isLoading = true;
         let projectName = this.searchProjectName;
-        let projectType = this.searchProjectType;
+        let projectType = this.searchProjectType=="all"?"":this.searchProjectType;
         let pageIndex = this.pageIndex;
         let pageSize = this.pageSize;
 
@@ -191,7 +209,38 @@
         }).then(rsp => {
           this.isLoading = false;
           if (rsp.success === true) {
-            this.table.data = rsp.result.items;
+            this.table.data = [];
+            for (var i = 0; i < rsp.result.items.length; i++) {
+              var item = rsp.result.items[i];
+
+              var projTypeObj = CONSTCFG.DataProjType.find(p => p.value == item.projectTypeCode);
+              var projTypeName = projTypeObj ? projTypeObj.label : "";
+              var projSubTypeObj = projTypeObj ? projTypeObj.children.find(p => p.value == item
+                .projectSubTypeCode) : null;
+              var projSubTypeName = projSubTypeObj ? projSubTypeObj.label : "";
+
+              this.table.data.push({
+                id: item.id,
+                name: item.name,
+                projectNo: item.projectNo,
+                location: item.location,
+                content: item.content,
+                projectTypeCode: item.projectTypeCode,
+                projectTypeName: projTypeName,
+                projectSubTypeCode: item.projectSubTypeCode,
+                projectSubTypeName: projSubTypeName,
+                ownerCompanyId: item.ownerCompany.id,
+                ownerCompanyName: item.ownerCompany.name,
+                ownerCompany : item.ownerCompany,
+                constructionCompanyId: item.constructionCompany.id,
+                constructionCompanyName: item.constructionCompany.name,
+                constructionCompany: item.constructionCompany,
+                landusageCode: item.landusageCode,
+                landusage: item.landusage
+              });
+            }
+
+            // this.table.data = rsp.result.items;
             this.total = rsp.result.totalCount;
           } else {
             this.$Message.error(rsp.error.message);
@@ -261,24 +310,41 @@
       onSave() {
         this.$refs.frmAddOrEdit.$refs['frmData'].validate((valid) => {
           if (valid) {
-            debugger;
             let form = this.$refs.frmAddOrEdit.getForm();
-            debugger;
-            Server.postJSON({
-              url: services.data.project,
-              params: JSON.stringify(form),
-              headers: {
-                'Content-Type': "application/json-patch+json"
-              }
-            }).then(rsp => {
-              if (rsp.success === true) {
-                this.$Message.success("操作成功");
-                this.onRefresh();
-                this.showDialog = false;
-              } else {
-                this.$Message.error(rsp.message);
-              }
-            });
+
+            if (!form.id || form.id < 0) {
+              Server.postJSON({
+                url: services.data.project,
+                params: JSON.stringify(form),
+                headers: {
+                  'Content-Type': "application/json-patch+json"
+                }
+              }).then(rsp => {
+                if (rsp.success === true) {
+                  this.$Message.success("操作成功");
+                  this.onRefresh();
+                  this.showDialog = false;
+                } else {
+                  this.$Message.error(rsp.error.message);
+                }
+              });
+            } else {
+              Server.putJSON({
+                url: services.data.project,
+                params: JSON.stringify(form),
+                headers: {
+                  'Content-Type': "application/json-patch+json"
+                }
+              }).then(rsp => {
+                if (rsp.success === true) {
+                  this.$Message.success("操作成功");
+                  this.onRefresh();
+                  this.showDialog = false;
+                } else {
+                  this.$Message.error(rsp.error.message);
+                }
+              });
+            }
           }
         })
       },

@@ -55,6 +55,26 @@ export default class Server {
     });
   }
 
+  static putJSON(opt){
+    return new Promise((resolve, reject) => {
+      this.setInitAxios();
+
+      Axios.put(encodeURI(opt.url), opt.params || {}, {
+        headers: opt.headers || {}
+      })
+        .then(function (rsp) {
+          rsp.data.netStatus = rsp.status;
+          resolve(rsp.data);
+        }).catch(err => {
+          reject({
+            netStatus: err.status,
+            status: 0,
+            message: "请求超时"
+          });
+        });
+    });
+  }
+
   static delete (opt) {
     return new Promise((resolve, reject) => {
       this.setInitAxios();

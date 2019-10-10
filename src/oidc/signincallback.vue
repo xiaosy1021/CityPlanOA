@@ -14,7 +14,6 @@ export default {
   created () {
     this.oidcSignInCallback()
       .then((redirectPath) => {
-        debugger
         this.$router.push(redirectPath)
       })
       .catch(() => {
