@@ -4,7 +4,13 @@ import {
   debug
 } from "util";
 export default class Server {
-  static get(opt) {
+  static _getToken = null;
+
+  static setToken (getToken) {
+    this._getToken = getToken;
+  }
+
+  static get (opt) {
     return new Promise((resolve, reject) => {
       this.setInitAxios();
       Axios.get(encodeURI(opt.url), {
@@ -15,7 +21,7 @@ export default class Server {
       });
     });
   }
-  static post(opt) {
+  static post (opt) {
     return new Promise((resolve, reject) => {
       this.setInitAxios();
       Axios.post(encodeURI(opt.url), QS.stringify(opt.params || {})).then(
@@ -29,13 +35,13 @@ export default class Server {
     });
   }
 
-  static postJSON(opt) {
+  static postJSON (opt) {
     return new Promise((resolve, reject) => {
       this.setInitAxios();
 
       Axios.post(encodeURI(opt.url), opt.params || {}, {
-          headers: opt.headers || {}
-        })
+        headers: opt.headers || {}
+      })
         .then(function (rsp) {
           rsp.data.netStatus = rsp.status;
           resolve(rsp.data);
@@ -49,13 +55,13 @@ export default class Server {
     });
   }
 
-  static delete(opt){
+  static delete (opt) {
     return new Promise((resolve, reject) => {
       this.setInitAxios();
 
       Axios.delete(encodeURI(opt.url), opt.params || {}, {
-          headers: opt.headers || {}
-        })
+        headers: opt.headers || {}
+      })
         .then(function (rsp) {
           rsp.data.netStatus = rsp.status;
           resolve(rsp.data);
@@ -71,7 +77,12 @@ export default class Server {
 
 
 
-  static setInitAxios(timeout) {
+  static setInitAxios (timeout) {
+    if (this._getToken !== null) {
+      const token = this._getToken()
+      Axios.defaults.headers.common['authorization'] = 'Bearer ' + token
+    }
+
     if (!timeout) {
       Axios.defaults.timeout = 5000;
     } else {

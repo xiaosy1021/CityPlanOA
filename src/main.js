@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
   // }
   next();
 
-  
+
   //选中一级菜单
   if (to.matched[1] && to.matched[1].meta.menuKey) {
     store.commit("setMainMenuKey", to.matched[1].meta.menuKey);

@@ -3,17 +3,16 @@ import Vuex from 'vuex'
 import { vuexOidcCreateStoreModule } from 'vuex-oidc'
 
 Vue.use(Vuex)
-
 export default new Vuex.Store({
   state: {
     currentMainKey: 'jcpz',
     currentSubKey: '1'
   },
   mutations: {
-    setMainMenuKey(state,key){
+    setMainMenuKey (state, key) {
       state.currentMainKey = key;
     },
-    setSubMenuKey(state,key){
+    setSubMenuKey (state, key) {
       state.currentSubKey = key;
     }
   },

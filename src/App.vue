@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 <style lang="less">
@@ -8,11 +8,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Server from "@/core/server"
+
 export default {
   name: 'App',
   computed: {
     ...mapGetters('oidcStore', [
-      'oidcIsAuthenticated'
+      'oidcIsAuthenticated',
+      'oidcAccessToken',
     ]),
     hasAccess: function () {
       return this.oidcIsAuthenticated || this.$route.meta.isPublic
@@ -24,6 +27,7 @@ export default {
     }
   },
   mounted () {
+    Server.setToken(() => this.oidcAccessToken);
     window.addEventListener('vuexoidc:userLoaded', this.userLoaded)
   },
   destroyed () {
