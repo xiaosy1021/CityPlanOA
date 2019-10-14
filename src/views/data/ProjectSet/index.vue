@@ -1,10 +1,8 @@
 <template>
     <div class="page-style">
         <div class="search-header">
-            <span>单位名称：</span>
-            <Input class="search-input-default" clearable v-model="searchCompanyName" @on-enter="onSearch" />
-            <span>单位代码：</span>
-            <Input class="search-input-default" clearable v-model="searchCompanyCode" @on-enter="onSearch" />
+            <span>项目集：</span>
+            <Input class="search-input-default" clearable v-model="searchProjSet" @on-enter="onSearch" />
 
             <search-buttons @on-search="onSearch" @on-refresh="onRefresh" @on-add="onAdd"></search-buttons>
         </div>
@@ -19,7 +17,7 @@
                 @on-page-size-change="pageSizeChanged" show-sizer show-elevator></Page>
         </div>
 
-        <Modal v-model="showDialog" :mask-closable="false" width="680" title="新增/编辑 单位">
+        <Modal v-model="showDialog" :mask-closable="false" width="680" title="新增/编辑 项目集">
             <AddOrEditForm ref="frmAddOrEdit" />
             <modal-footer slot="footer" @on-save="onSave" @on-cancel="onCancelDialog" />
         </Modal>
@@ -73,51 +71,16 @@
                         },
 
                         {
-                            title: "单位名称",
+                            title: "项目集",
                             key: "name",
                             width: 150,
                             sortable: true,
                             align: "center"
                         },
                         {
-                            title: "单位代码",
+                            title: "父项目集",
                             key: "companyNo",
                             width: 120,
-                            sortable: true,
-                            align: "center"
-                        },
-                        {
-                            title: "联系人",
-                            key: "contactor",
-                            width: 120,
-                            sortable: true,
-                            align: "center"
-                        },
-                        {
-                            title: "地址",
-                            key: "address",
-                            width: 300,
-                            sortable: true,
-                            align: "center"
-                        },
-                        {
-                            title: "邮编",
-                            key: "postCode",
-                            width: 200,
-                            sortable: true,
-                            align: "center"
-                        },
-                        {
-                            title: "联系电话",
-                            key: "phone",
-                            width: 150,
-                            sortable: true,
-                            align: "center"
-                        },
-                        {
-                            title: "传真",
-                            key: "fax",
-                            width: 150,
                             sortable: true,
                             align: "center"
                         },
@@ -179,23 +142,24 @@
             },
             loadTable() {
                 this.isLoading = true;
-                let companyName = this.searchCompanyName;
-                let companyCode = this.searchCompanyCode;
+                let projectSetNo = this.searchProjSet;
                 let pageIndex = this.pageIndex;
                 let pageSize = this.pageSize;
 
-                Server.get({
-                    url: services.data.company +
-                        `?name=${companyName}&CompanyNo=${companyCode}&page=${pageIndex}&pageSize=${pageSize}`
-                }).then(rsp => {
-                    this.isLoading = false;
-                    if (rsp.success === true) {
-                        this.table.data = rsp.result.items;
-                        this.total = rsp.result.totalCount;
-                    } else {
-                        this.$Message.error(rsp.error.message);
-                    }
-                });
+                this.$Message.error('暂无接口');
+
+                // Server.get({
+                //     url: services.data.company +
+                //         `?name=${companyName}&CompanyNo=${companyCode}&page=${pageIndex}&pageSize=${pageSize}`
+                // }).then(rsp => {
+                //     this.isLoading = false;
+                //     if (rsp.success === true) {
+                //         this.table.data = rsp.result.items;
+                //         this.total = rsp.result.totalCount;
+                //     } else {
+                //         this.$Message.error(rsp.error.message);
+                //     }
+                // });
             },
             //刷新
             onRefresh() {
@@ -230,16 +194,16 @@
                         title: "提示",
                         content: "确定删除该记录?",
                         onOk: () => {
-                            Server.delete({
-                                url: services.data.company + "/" + currentRow.id
-                            }).then(rsp => {
-                                if (rsp.success == true) {
-                                    this.$Message.success("删除成功");
-                                    this.onRefresh();
-                                } else {
-                                    this.$Message.error(rsp.message);
-                                }
-                            });
+                            // Server.delete({
+                            //     url: services.data.company + "/" + currentRow.id
+                            // }).then(rsp => {
+                            //     if (rsp.success == true) {
+                            //         this.$Message.success("删除成功");
+                            //         this.onRefresh();
+                            //     } else {
+                            //         this.$Message.error(rsp.message);
+                            //     }
+                            // });
                         },
                         onCancel: () => {}
                     });
@@ -257,26 +221,26 @@
             },
             //保存
             onSave() {
-                this.$refs.frmAddOrEdit.$refs['frmCompany'].validate((valid) => {
-                    if (valid) {
-                        let form = this.$refs.frmAddOrEdit.getForm();
-                        Server.postJSON({
-                            url: services.data.company,
-                            params: JSON.stringify(form),
-                            headers: {
-                                'Content-Type': "application/json-patch+json"
-                            }
-                        }).then(rsp => {
-                            if (rsp.success === true) {
-                                this.$Message.success("操作成功");
-                                this.onRefresh();
-                                this.showDialog = false;
-                            } else {
-                                this.$Message.error(rsp.message);
-                            }
-                        });
-                    }
-                })
+                // this.$refs.frmAddOrEdit.$refs['frmData'].validate((valid) => {
+                //     if (valid) {
+                //         let form = this.$refs.frmAddOrEdit.getForm();
+                //         Server.postJSON({
+                //             url: services.data.projectSet,
+                //             params: JSON.stringify(form),
+                //             headers: {
+                //                 'Content-Type': "application/json-patch+json"
+                //             }
+                //         }).then(rsp => {
+                //             if (rsp.success === true) {
+                //                 this.$Message.success("操作成功");
+                //                 this.onRefresh();
+                //                 this.showDialog = false;
+                //             } else {
+                //                 this.$Message.error(rsp.message);
+                //             }
+                //         });
+                //     }
+                // })
             },
 
             //取消

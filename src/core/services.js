@@ -13,6 +13,7 @@ export const services = {
   data:{
     company:`http://${SrvIP}/companies`,
     project:`http://${SrvIP}/projects`,
+    application:`http://${SrvIP}/applications`,
   },
 
   dictionary:{

@@ -157,11 +157,9 @@
         valueLandusage: []
       };
     },
-    created() {
-      this.init();
-    },
+    created() {},
     mounted() {
-
+      this.init();
     },
     methods: {
       init() {
@@ -222,8 +220,8 @@
         this.form.landArea = 0;
         this.form.projectTypeCode = "";
         this.form.projectSubTypeCode = "";
-        // this.form.ownerCompanyId = -1;
-        // this.form.constructionCompanyId = -1;
+        this.form.ownerCompanyId = -1;
+        this.form.constructionCompanyId = -1;
 
         this.valueProjType = [];
         this.valueLandusage = [];
@@ -283,7 +281,5 @@
 </script>
 
 <style scoped>
-  .span-line {
-    line-height: 2.5
-  }
+
 </style>

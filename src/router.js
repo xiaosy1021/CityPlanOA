@@ -64,16 +64,16 @@ const router =  new Router({
             import('@/views/data/index.vue'),
           children: [{
             path: '/',
-            redirect: "/data/EmailMsgTmpl",
+            redirect: "/data/ProjectSet",
           }, {
-            path: '/data/EmailMsgTmpl',
+            path: '/data/ProjectSet',
             meta: {
               name: '项目集',
               menuKey: '1-1',
               auth: true
             },
             component: () =>
-              import('@/views/data/EmailMsgTmpl/index.vue')
+              import('@/views/data/ProjectSet/index.vue')
           }, {
             path: '/data/Project',
             meta: {
@@ -84,7 +84,7 @@ const router =  new Router({
             component: () =>
               import('@/views/data/Project/index.vue')
           }, {
-            path: '/data/Grid',
+            path: '/data/Application',
             meta: {
               name: '申请信息',
               menuKey: '1-3',
@@ -93,7 +93,7 @@ const router =  new Router({
               //keepAlive: true
             },
             component: () =>
-              import('@/views/data/Grid/index.vue')
+              import('@/views/data/Application/index.vue')
           }, {
             path: '/data/Company',
             meta: {

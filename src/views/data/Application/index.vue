@@ -1,14 +1,8 @@
 <template>
   <div class="page-style">
     <div class="search-header">
-      <span>项目名称：</span>
-      <Input class="search-input-default" clearable v-model="searchProjectName" @on-enter="onSearch" />
-      <span>项目类型：</span>
-      <!-- <Input class="search-input-default" clearable v-model="searchProjectType" @on-enter="onSearch" /> -->
-
-      <Select v-model="searchProjectType" class="search-input-default" style="width:200px">
-        <Option v-for="item in dataProjType" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
+      <span>申请内容：</span>
+      <Input class="search-input-default" clearable v-model="searchContent" @on-enter="onSearch" />
 
       <search-buttons @on-search="onSearch" @on-refresh="onRefresh" @on-add="onAdd"></search-buttons>
     </div>
@@ -23,7 +17,7 @@
         @on-page-size-change="pageSizeChanged" show-sizer show-elevator></Page>
     </div>
 
-    <Modal v-model="showDialog" :mask-closable="false" width="680" title="新增/编辑 项目">
+    <Modal v-model="showDialog" :mask-closable="false" width="680" title="新增/编辑 申请">
       <AddOrEditForm ref="frmAddOrEdit" />
       <modal-footer slot="footer" @on-save="onSave" @on-cancel="onCancelDialog" />
     </Modal>
@@ -36,9 +30,6 @@
   import {
     services
   } from "@/core/services";
-  import {
-    CONSTCFG
-  } from "@/core/const";
   import {
     computeh
   } from "@/core/computeh";
@@ -65,10 +56,7 @@
         showRelated: false,
         isLoading: false,
 
-        searchProjectName: "",
-        searchProjectType: "",
-
-        dataProjType: [],
+        searchContent: "",
 
         pageIndex: 1,
         pageSize: 10,
@@ -83,51 +71,37 @@
 
             {
               title: "项目名称",
-              key: "name",
+              key: "projectName",
               width: 150,
               sortable: true,
               align: "center"
             },
             {
-              title: "项目号",
-              key: "projectNo",
+              title: "申请号",
+              key: "applicationNo",
               width: 120,
+              sortable: true,
               align: "center"
             },
             {
-              title: "项目内容",
+              title: "申请单位",
+              key: "applicationCompanyName",
+              width: 150,
+              sortable: true,
+              align: "center"
+            },
+            {
+              title: "设计单位",
+              key: "designCompanyName",
+              width: 150,
+              sortable: true,
+              align: "center"
+            },
+            {
+              title: "申请内容",
               key: "content",
-              width: 300,
-              align: "center"
-            },
-            {
-              title: "项目位置",
-              key: "location",
-              width: 300,
-              align: "center"
-            },
-            {
-              title: "项目类型",
-              key: "projectTypeName",
-              width: 200,
-              align: "center"
-            },
-            {
-              title: "项目子类型",
-              key: "projectSubTypeName",
-              width: 150,
-              align: "center"
-            },
-            {
-              title: "产权单位",
-              key: "ownerCompanyName",
-              width: 150,
-              align: "center"
-            },
-            {
-              title: "建设单位",
-              key: "constructionCompanyName",
-              width: 150,
+              width: 350,
+              sortable: true,
               align: "center"
             },
 
@@ -172,16 +146,7 @@
         }
       }
     },
-    created() {
-      this.dataProjType.push({
-        value: "all",
-        label: "-- 全部 --"
-      });
-
-      for (var i = 0; i < CONSTCFG.DataProjType.length; i++) {
-        this.dataProjType.push(CONSTCFG.DataProjType[i]);
-      }
-    },
+    created() {},
     mounted() {
       this.loadTable();
     },
@@ -198,50 +163,45 @@
       },
       loadTable() {
         this.isLoading = true;
-        let projectName = this.searchProjectName;
-        let projectType = this.searchProjectType=="all"?"":this.searchProjectType;
+        let content = this.searchContent;
         let pageIndex = this.pageIndex;
         let pageSize = this.pageSize;
 
+
         Server.get({
-          url: services.data.project +
-            `?name=${projectName}&projectType=${projectType}&page=${pageIndex}&pageSize=${pageSize}`
+          url: services.data.application +
+            `?content=${content}&page=${pageIndex}&pageSize=${pageSize}`
         }).then(rsp => {
           this.isLoading = false;
           if (rsp.success === true) {
+            // this.table.data = rsp.result.items;
+            this.total = rsp.result.totalCount;
+
             this.table.data = [];
             for (var i = 0; i < rsp.result.items.length; i++) {
               var item = rsp.result.items[i];
 
-              var projTypeObj = CONSTCFG.DataProjType.find(p => p.value == item.projectTypeCode);
-              var projTypeName = projTypeObj ? projTypeObj.label : "";
-              var projSubTypeObj = projTypeObj ? projTypeObj.children.find(p => p.value == item
-                .projectSubTypeCode) : null;
-              var projSubTypeName = projSubTypeObj ? projSubTypeObj.label : "";
+              // var projTypeObj = CONSTCFG.DataProjType.find(p => p.value == item.projectTypeCode);
+              // var projTypeName = projTypeObj ? projTypeObj.label : "";
+              // var projSubTypeObj = projTypeObj ? projTypeObj.children.find(p => p.value == item
+              //   .projectSubTypeCode) : null;
+              // var projSubTypeName = projSubTypeObj ? projSubTypeObj.label : "";
 
               this.table.data.push({
                 id: item.id,
-                name: item.name,
+                projectId: item.projectId,
                 projectNo: item.projectNo,
-                location: item.location,
+                projectName: '未返回...',
+                applicationNo: item.applicationNo,
                 content: item.content,
-                projectTypeCode: item.projectTypeCode,
-                projectTypeName: projTypeName,
-                projectSubTypeCode: item.projectSubTypeCode,
-                projectSubTypeName: projSubTypeName,
-                ownerCompanyId: item.ownerCompany.id,
-                ownerCompanyName: item.ownerCompany.name,
-                ownerCompany : item.ownerCompany,
-                constructionCompanyId: item.constructionCompany.id,
-                constructionCompanyName: item.constructionCompany.name,
-                constructionCompany: item.constructionCompany,
-                landusageCode: item.landusageCode,
-                landusage: item.landusage
+
+                applicationCompany: item.applicantCompany,
+                applicationCompanyName: item.applicantCompany.name,
+                designCompany: item.designCompany,
+                designCompanyName: item.designCompany.name,
+
               });
             }
-
-            // this.table.data = rsp.result.items;
-            this.total = rsp.result.totalCount;
           } else {
             this.$Message.error(rsp.error.message);
           }
@@ -281,7 +241,7 @@
             content: "确定删除该记录?",
             onOk: () => {
               Server.delete({
-                url: services.data.project + "/" + currentRow.id
+                url: services.data.application + "/" + currentRow.id
               }).then(rsp => {
                 if (rsp.success == true) {
                   this.$Message.success("删除成功");
@@ -313,7 +273,7 @@
 
             if (!form.id || form.id < 0) {
               Server.postJSON({
-                url: services.data.project,
+                url: services.data.application,
                 params: JSON.stringify(form),
                 headers: {
                   'Content-Type': "application/json-patch+json"
@@ -329,7 +289,7 @@
               });
             } else {
               Server.putJSON({
-                url: services.data.project,
+                url: services.data.application,
                 params: JSON.stringify(form),
                 headers: {
                   'Content-Type': "application/json-patch+json"
