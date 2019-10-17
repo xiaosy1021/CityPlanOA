@@ -246,12 +246,11 @@
 
             onSave() {
                 this.$refs.frmAddOrEditDoc.$refs['frmData'].validate((valid) => {
-                    debugger;
                     if (valid) {
                         let form = this.$refs.frmAddOrEditDoc.getForm();
 
-                        if (!form.Id || form.Id < 0) {
-                            if (form.File == null) {
+                        if (!form.id || form.id < 0) {
+                            if (form.file == null) {
                                 this.$Message.error("请选择上传文档！");
                             }
 
@@ -271,24 +270,69 @@
                                     this.$Message.error(rsp.error.message);
                                 }
                             });
+                        } else {
+                            var arrSrv = [];
+
+                            arrSrv.push(
+                                new Promise((resolve, reject) => {
+                                    Server.putFormData({
+                                        url: services.data.documents,
+                                        params: form,
+                                        headers: {
+                                            'Content-Type': "application/json-patch+json"
+                                        }
+                                    }).then(rsp => {
+                                        if (rsp.success === true) {
+                                            // this.$Message.success("操作成功");
+                                            // this.loadRelatedDoc();
+                                            // this.showDialog = false;
+                                            resolve(true);
+                                        } else {
+                                            this.$Message.error(rsp.error.message);
+                                            reject("更新文档信息失败！");
+                                        }
+                                    }).catch((error) => {
+                                        reject(error);
+                                    });
+                                })
+                            );
+
+                            if (form.file) {
+                                arrSrv.push(
+                                    new Promise((resolve, reject) => {
+                                        Server.putFormData({
+                                            url: services.data.documents + "/" + form.id + "/upload",
+                                            params: form,
+                                            headers: {
+                                                'Content-Type': "multipart/form-data; boundary=----WebKitFormBoundarysookc1NholMxd9OM"
+                                            }
+                                        }).then(rsp => {
+                                            if (rsp.success === true) {
+                                                // this.$Message.success("操作成功");
+                                                // this.loadRelatedDoc();
+                                                // this.showDialog = false;
+                                                resolve(true);
+                                            } else {
+                                                this.$Message.error(rsp.error.message);
+                                                reject("更新文档失败！");
+                                            }
+                                        }).catch((error) => {
+                                            reject(error);
+                                        });
+                                    })
+                                );
+                            }
+
+                            Promise.all(arrSrv).then(r => {
+
+                                this.$Message.success("操作成功");
+                                this.loadRelatedDoc();
+                                this.showDialog = false;
+
+                            }).catch((error) => {
+                                console.log(error)
+                            })
                         }
-                        // else {
-                        //   Server.putJSON({
-                        //     url: services.data.application,
-                        //     params: JSON.stringify(form),
-                        //     headers: {
-                        //       'Content-Type': "application/json-patch+json"
-                        //     }
-                        //   }).then(rsp => {
-                        //     if (rsp.success === true) {
-                        //       this.$Message.success("操作成功");
-                        //       this.onRefresh();
-                        //       this.showDialog = false;
-                        //     } else {
-                        //       this.$Message.error(rsp.error.message);
-                        //     }
-                        //   });
-                        // }
                     }
                 })
 

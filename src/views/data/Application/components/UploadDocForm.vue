@@ -136,18 +136,18 @@
             },
             getForm() {
                 var rst = {
-                    Id: this.form.id,
-                    ProjectId: this.form.projectId,
-                    ProjectNo: this.form.projectNo,
-                    ApplicationId: this.form.applicationId,
-                    ApplicationNo: this.form.applicationNo,
+                    id: this.form.id,
+                    projectId: this.form.projectId,
+                    projectNo: this.form.projectNo,
+                    applicationId: this.form.applicationId,
+                    applicationNo: this.form.applicationNo,
 
-                    FileName: this.form.fileName,
-                    Remark: this.form.remark,
+                    fileName: this.form.fileName,
+                    remark: this.form.remark,
 
-                    DocTypeCode: this.valueDocType.length > 2 ? this.valueDocType[this.valueDocType.length - 2] : "",
-                    DocSubTypeCode: this.valueDocType.length > 1 ? this.valueDocType[this.valueDocType.length - 1] : "",
-                    File: this.form.file
+                    docTypeCode: this.valueDocType.length > 2 ? this.valueDocType[this.valueDocType.length - 2] : "",
+                    docSubTypeCode: this.valueDocType.length > 1 ? this.valueDocType[this.valueDocType.length - 1] : "",
+                    file: this.form.file
                 };
 
                 return rst;

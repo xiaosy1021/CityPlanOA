@@ -40,7 +40,7 @@ export default class Server {
       });
     });
   }
-  
+
   static post(opt) {
     return new Promise((resolve, reject) => {
       this.setInitAxios();
@@ -105,6 +105,31 @@ export default class Server {
       this.setInitAxios();
 
       Axios.put(encodeURI(opt.url), opt.params || {}, {
+          headers: opt.headers || {}
+        })
+        .then(function (rsp) {
+          rsp.data.netStatus = rsp.status;
+          resolve(rsp.data);
+        }).catch(err => {
+          reject({
+            netStatus: err.status,
+            status: 0,
+            message: "请求超时"
+          });
+        });
+    });
+  }
+
+  static putFormData(opt) {
+    var formData = new FormData();
+    Object.keys(opt.params).forEach((key) => {
+      formData.append(key, opt.params[key]);
+    });
+
+    return new Promise((resolve, reject) => {
+      this.setInitAxios();
+
+      Axios.put(encodeURI(opt.url), formData, {
           headers: opt.headers || {}
         })
         .then(function (rsp) {
