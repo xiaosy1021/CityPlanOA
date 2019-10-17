@@ -19,10 +19,18 @@ var _CONSTCFG = {
     IP: "122.193.33.86:8006",
     SrvIP: "192.168.84.124:8098",
 
+    //字典
+    DataDictionary: [],
     //项目类型 级联选择
     DataProjType: [],
     //用地性质 级联选择
     DataLandusage: [],
+    //文档类型
+    DataDocType:[],
+    //书证类型
+    DataCertType:[],
+    //申请类型
+    DataApplicationType:[]
 
 };
 

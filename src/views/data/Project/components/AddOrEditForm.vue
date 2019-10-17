@@ -15,25 +15,25 @@
       <FormItem label="项目集:"><Input placeholder="项目集" /></FormItem>
       </Col> -->
 
-      <Col span="11">
+      <Col span="12">
       <FormItem label="项目类型：">
         <Cascader :data="dataProjType" v-model="valueProjType"></Cascader>
       </FormItem>
       </Col>
 
-      <Col span="11" offset="2">
-      <FormItem label="项目号:"><Input v-model="form.projectNo" placeholder="项目号" /></FormItem>
+      <Col span="11" offset="1">
+      <FormItem label="项目号:"><Input v-model="form.projectNo" placeholder="项目号" :disabled="isEdit"/></FormItem>
       </Col>
     </Row>
 
     <Row>
-      <Col span="11">
+      <Col span="12">
       <FormItem label="用地性质：">
         <Cascader :data="dataLandusage" v-model="valueLandusage"></Cascader>
       </FormItem>
       </Col>
 
-      <Col span="11" offset="2">
+      <Col span="11" offset="1">
       <FormItem label="用地面积:"><Input v-model="form.landArea" placeholder="用地面积" /></FormItem>
       </Col>
     </Row>
@@ -154,7 +154,9 @@
 
         //用地性质 级联选择
         dataLandusage: [],
-        valueLandusage: []
+        valueLandusage: [],
+
+        isEdit:false,
       };
     },
     created() {},
@@ -209,6 +211,8 @@
 
       //重置表单
       resetForm() {
+        this.isEdit=false;
+
         this.form.id = -1;
         this.form.name = "";
         this.form.projectNo = "";
@@ -228,6 +232,8 @@
       },
       //编辑表单
       editForm(row) {
+        this.isEdit=true;
+
         this.form.id = row.id;
         this.form.name = row.name;
         this.form.projectNo = row.projectNo;

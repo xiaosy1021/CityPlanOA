@@ -103,15 +103,6 @@ const router =  new Router({
             },
             component: () =>
               import('@/views/data/Company/index.vue')
-          }, {
-            path: '/data/iSearch',
-            meta: {
-              name: '文档信息',
-              menuKey: '1-5',
-              auth: true
-            },
-            component: () =>
-              import('@/views/data/iSearch/index.vue')
           }]
         },
         {

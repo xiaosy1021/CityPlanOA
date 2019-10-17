@@ -63,48 +63,96 @@
             CONSTCFG.DataProjType = [];
             CONSTCFG.DataLandusage = [];
 
+            CONSTCFG.DataDictionary = rsp.message;
             this.dataDictionary = rsp.message;
 
-            this.getProjTypeTree();
-            this.getLandusageTree();
+            this.dataDictionary.forEach(p => {
+              this.getProjTypeTree(p);
+              this.getLandusageTree(p);
+              this.getDocTypeTree(p);
+              this.getCertTypeTree(p);
+              this.getApplicationTypeTree(p);
+            })
+
           } else {
             this.$Message.error("获取字典信息失败！");
           }
         });
       },
 
-      getProjTypeTree() {
-        this.dataDictionary.forEach(v => {
-          if (v.ParentCode == "1001000") {
+      getProjTypeTree(v) {
+        if (v.ParentCode == "1001000") {
 
-            var item = {
-              value: v.Code,
-              label: v.DisplayText,
-              children: []
-            };
+          var item = {
+            value: v.Code,
+            label: v.DisplayText,
+            children: []
+          };
 
-            this.getChildren(item);
+          this.getChildren(item);
 
-            CONSTCFG.DataProjType.push(item);
-          }
-        })
+          CONSTCFG.DataProjType.push(item);
+        }
       },
 
-      getLandusageTree() {
-        this.dataDictionary.forEach(v => {
-          if (v.ParentCode == "322013000") {
+      getLandusageTree(v) {
+        if (v.ParentCode == "322013000") {
 
-            var item = {
-              value: v.Code,
-              label: v.DisplayText,
-              children: []
-            };
+          var item = {
+            value: v.Code,
+            label: v.DisplayText,
+            children: []
+          };
 
-            this.getChildren(item);
+          this.getChildren(item);
 
-            CONSTCFG.DataLandusage.push(item);
-          }
-        })
+          CONSTCFG.DataLandusage.push(item);
+        }
+      },
+
+      getDocTypeTree(v){
+        if (v.ParentCode == "4010000-0") {
+
+          var item = {
+            value: v.Code,
+            label: v.DisplayText,
+            children: []
+          };
+
+          this.getChildren(item);
+
+          CONSTCFG.DataDocType.push(item);
+        }
+      },
+
+      getCertTypeTree(v){
+        if (v.ParentCode == "1110000-0") {
+
+          var item = {
+            value: v.Code,
+            label: v.DisplayText,
+            children: []
+          };
+
+          this.getChildren(item);
+
+          CONSTCFG.DataCertType.push(item);
+        }
+      },
+
+      getApplicationTypeTree(v){
+        if (v.ParentCode == "322019000") {
+
+          var item = {
+            value: v.Code,
+            label: v.DisplayText,
+            children: []
+          };
+
+          this.getChildren(item);
+
+          CONSTCFG.DataApplicationType.push(item);
+        }
       },
 
       getChildren(item) {

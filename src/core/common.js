@@ -70,6 +70,11 @@ export const renderHelper = {
             })
         ]);
     },
+
+    //渲染一个下载按钮
+    renderDownloadButtonForTable(h, params, func) {
+        return this.renderSingleButtonForTable(h, params, func, "下载", "md-download");
+    },
     //渲染一个相关按钮
     renderConfigButtonForTable(h, params, func) {
         return this.renderSingleButtonForTable(h, params, func, "相关申请", "md-link");

@@ -17,7 +17,7 @@
         @on-page-size-change="pageSizeChanged" show-sizer show-elevator></Page>
     </div>
 
-    <Modal v-model="showDialog" :mask-closable="false" width="680" title="新增/编辑 申请">
+    <Modal v-model="showDialog" :mask-closable="false" width="980" title="新增/编辑 申请">
       <AddOrEditForm ref="frmAddOrEdit" />
       <modal-footer slot="footer" @on-save="onSave" @on-cancel="onCancelDialog" />
     </Modal>
@@ -31,11 +31,17 @@
     services
   } from "@/core/services";
   import {
+    CONSTCFG
+  } from "@/core/const";
+  import {
     computeh
   } from "@/core/computeh";
   import {
     renderHelper
   } from "@/core/common";
+  import {
+    treeDicHelper
+  } from "@/core/TreeDictionary";
   import SearchButtons from "@/components/search-buttons";
 
   import ModalFooter from "@/components/modal-footer";
@@ -68,7 +74,13 @@
               width: 60,
               align: "center"
             },
-
+            {
+              title: "项目号",
+              key: "projectNo",
+              width: 120,
+              sortable: true,
+              align: "center"
+            },
             {
               title: "项目名称",
               key: "projectName",
@@ -80,6 +92,13 @@
               title: "申请号",
               key: "applicationNo",
               width: 120,
+              sortable: true,
+              align: "center"
+            },
+            {
+              title: "申请类型",
+              key: "applicationType",
+              width: 300,
               sortable: true,
               align: "center"
             },
@@ -100,7 +119,7 @@
             {
               title: "申请内容",
               key: "content",
-              width: 350,
+              width: 500,
               sortable: true,
               align: "center"
             },
@@ -174,18 +193,13 @@
         }).then(rsp => {
           this.isLoading = false;
           if (rsp.success === true) {
-            // this.table.data = rsp.result.items;
             this.total = rsp.result.totalCount;
 
             this.table.data = [];
             for (var i = 0; i < rsp.result.items.length; i++) {
               var item = rsp.result.items[i];
 
-              // var projTypeObj = CONSTCFG.DataProjType.find(p => p.value == item.projectTypeCode);
-              // var projTypeName = projTypeObj ? projTypeObj.label : "";
-              // var projSubTypeObj = projTypeObj ? projTypeObj.children.find(p => p.value == item
-              //   .projectSubTypeCode) : null;
-              // var projSubTypeName = projSubTypeObj ? projSubTypeObj.label : "";
+              var lblApplicationType = treeDicHelper.getDisplayByRSearchTree(item.applicationTypeCode,'322019000');
 
               this.table.data.push({
                 id: item.id,
@@ -193,6 +207,8 @@
                 projectNo: item.projectNo,
                 projectName: '未返回...',
                 applicationNo: item.applicationNo,
+                applicationTypeCode: item.applicationTypeCode,
+                applicationType: lblApplicationType,
                 content: item.content,
 
                 applicationCompany: item.applicantCompany,
@@ -207,6 +223,7 @@
           }
         });
       },
+
       //刷新
       onRefresh() {
         this.loadTable();
