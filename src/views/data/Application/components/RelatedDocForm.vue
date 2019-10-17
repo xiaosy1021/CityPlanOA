@@ -5,7 +5,7 @@
         </div>
 
         <div class="main-table-section">
-            <Table :loading="isLoading" border max-height="350px" :columns="table.columns" :data="table.data">
+            <Table :loading="isLoading" border max-height="280" :columns="table.columns" :data="table.data">
             </Table>
         </div>
 
@@ -197,18 +197,51 @@
 
             onAdd() {
                 this.showDialog = true;
-                this.$refs.frmAddOrEditDoc.resetForm(this.projectId,this.projectNo,this.applicationId,this.applicationNo);
+                this.$refs.frmAddOrEditDoc.resetForm(this.projectId, this.projectNo, this.applicationId, this
+                    .applicationNo);
             },
-            onEdit() {
-                this.$Message.error("点击了编辑");
+            onEdit(currentRow, index) {
+                if (!currentRow) {
+                    this.$Message.warning("请选择需要操作的行");
+                } else {
+                    this.$refs.frmAddOrEditDoc.editForm(currentRow);
+                    this.showDialog = true;
+                }
             },
 
-            onDelete() {
-                this.$Message.error("点击了删除");
+            onDelete(currentRow, index) {
+                if (!currentRow) {
+                    this.$Message.warning("请选择需要删除的行");
+                } else {
+                    this.$Modal.confirm({
+                        title: "提示",
+                        content: "确定删除该记录?",
+                        onOk: () => {
+                            Server.delete({
+                                url: services.data.documents + "/" + currentRow.id
+                            }).then(rsp => {
+                                if (rsp.success == true) {
+                                    this.$Message.success("删除成功");
+                                    this.loadRelatedDoc();
+                                } else {
+                                    this.$Message.error(rsp.message);
+                                }
+                            });
+                        },
+                        onCancel: () => {}
+                    });
+                }
             },
 
-            onDownload() {
-                this.$Message.error("点击了下载");
+            onDownload(currentRow, index) {
+                if (!currentRow) {
+                    this.$Message.warning("请选择需要下载的文档");
+                } else {
+                    Server.getDownloadFile({
+                        url: services.data.documents + "/" + currentRow.id + "/download",
+                        fileName: currentRow.fileName
+                    })
+                }
             },
 
             onSave() {
@@ -218,6 +251,10 @@
                         let form = this.$refs.frmAddOrEditDoc.getForm();
 
                         if (!form.Id || form.Id < 0) {
+                            if (form.File == null) {
+                                this.$Message.error("请选择上传文档！");
+                            }
+
                             Server.postFormData({
                                 url: services.data.documents,
                                 // params: JSON.stringify(form),

@@ -21,6 +21,26 @@ export default class Server {
       });
     });
   }
+
+  static getDownloadFile(opt) {
+    return new Promise((resolve, reject) => {
+      this.setInitAxios();
+      Axios.get(encodeURI(opt.url), {
+        params: opt.params || {}
+      }).then(function (rsp) {
+        if (rsp.data != "") {
+          var url = window.URL.createObjectURL(new Blob([rsp.data]));
+          var link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', opt.fileName||'');
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      });
+    });
+  }
+  
   static post(opt) {
     return new Promise((resolve, reject) => {
       this.setInitAxios();
@@ -58,7 +78,7 @@ export default class Server {
   static postFormData(opt) {
     var formData = new FormData();
     Object.keys(opt.params).forEach((key) => {
-        formData.append(key, opt.params[key]);
+      formData.append(key, opt.params[key]);
     });
 
     return new Promise((resolve, reject) => {

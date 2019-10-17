@@ -95,6 +95,7 @@
             },
             handleUpload(file) {
                 this.form.file = file;
+                this.form.fileName = file.name;
                 return false;
             },
 
@@ -134,7 +135,6 @@
                 this.valueDocType = treeDicHelper.getArrValueByRSearchTree(row.docSubTypeCode, '4010000-0');
             },
             getForm() {
-                debugger;
                 var rst = {
                     Id: this.form.id,
                     ProjectId: this.form.projectId,
@@ -148,10 +148,7 @@
                     DocTypeCode: this.valueDocType.length > 2 ? this.valueDocType[this.valueDocType.length - 2] : "",
                     DocSubTypeCode: this.valueDocType.length > 1 ? this.valueDocType[this.valueDocType.length - 1] : "",
                     File: this.form.file
-
                 };
-
-                console.log(rst);
 
                 return rst;
             },
