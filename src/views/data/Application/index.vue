@@ -119,7 +119,7 @@
             {
               title: "申请内容",
               key: "content",
-              width: 500,
+              width: 390,
               sortable: true,
               align: "center"
             },

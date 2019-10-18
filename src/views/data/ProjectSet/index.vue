@@ -56,8 +56,7 @@
                 showRelated: false,
                 isLoading: false,
 
-                searchCompanyName: "",
-                searchCompanyCode: "",
+                searchProjSet: "",
 
                 pageIndex: 1,
                 pageSize: 10,
