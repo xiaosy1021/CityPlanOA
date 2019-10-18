@@ -10,8 +10,8 @@
         </div>
 
 
-        <Modal v-model="showDialog" :mask-closable="false" width="680" title="新增/编辑 文档">
-            <UploadDocForm ref="frmAddOrEditDoc" />
+        <Modal v-model="showDialog" :mask-closable="false" width="680" title="新增/编辑 书证">
+            <AddCertForm ref="frmAddOrEditCert" />
             <modal-footer slot="footer" @on-save="onSave" @on-cancel="onCancelDialog" />
         </Modal>
 
@@ -34,12 +34,12 @@
     } from "@/core/TreeDictionary";
 
     import ModalFooter from "@/components/modal-footer";
-    import UploadDocForm from "./UploadDocForm.vue";
+    import AddCertForm from "./AddCertForm.vue";
 
     export default {
         components: {
             ModalFooter,
-            UploadDocForm
+            AddCertForm
         },
         props: {
             projectId: {
@@ -65,8 +65,8 @@
                 showDialog: false,
                 isLoading: false,
 
-                //文档类型 级联选择
-                dataDocType: [],
+                //书证类型 级联选择
+                dataCertType: [],
 
                 table: {
                     columns: [{
@@ -77,22 +77,22 @@
                         },
 
                         {
-                            title: "文件名",
-                            key: "fileName",
+                            title: "证书号",
+                            key: "certNo",
                             width: 150,
                             sortable: true,
                             align: "center"
                         },
                         {
-                            title: "文档类型",
-                            key: "docType",
+                            title: "证书类型",
+                            key: "txtCertType",
                             width: 230,
                             sortable: true,
                             align: "center"
                         },
                         {
-                            title: "备注",
-                            key: "remark",
+                            title: "发证日期",
+                            key: "issuedDate",
                             width: 250,
                             sortable: true,
                             align: "center"
@@ -147,20 +147,19 @@
                 if (this.applicationId > 0) {
                     this.loadTable();
                 }
-
             }
         },
         computed: {},
         methods: {
             init() {
-                this.dataDocType = CONSTCFG.DataDocType;
+                this.dataCertType = CONSTCFG.DataCertType;
             },
 
             loadTable() {
                 this.isLoading = true;
 
                 Server.get({
-                    url: services.data.application + `/` + this.applicationId + `/documents`
+                    url: services.data.application + `/` + this.applicationId + `/certs`
                 }).then(rsp => {
                     this.isLoading = false;
                     if (rsp.success === true) {
@@ -168,10 +167,13 @@
                         for (var i = 0; i < rsp.result.length; i++) {
                             var item = rsp.result[i];
 
-                            var valueDocType = treeDicHelper.getArrValueByRSearchTree(item.docSubTypeCode,
-                                '4010000-0');
-                            var txtDocType = treeDicHelper.getDisplayByRSearchTree(item.docSubTypeCode,
-                                '4010000-0');
+                            var valueCertType = treeDicHelper.getArrValueByRSearchTree(item.discriminator,
+                                '1110000-0');
+                            var txtCertType = treeDicHelper.getDisplayByRSearchTree(item.discriminator,
+                                '1110000-0');
+
+
+
 
                             this.table.data.push({
                                 id: item.id,
@@ -179,31 +181,33 @@
                                 projectNo: item.projectNo,
                                 applicationId: item.applicationId,
                                 applicationNo: item.applicationNo,
-                                fileName: item.fileName,
-                                remark: item.remark,
-                                docTypeCode: item.docTypeCode,
-                                docSubTypeCode: item.docSubTypeCode,
+                                certNo: item.certNo,
+                                issuedDate: new Date(item.issuedDate).Format("yyyy-MM-dd"),
 
-                                docType: txtDocType,
-                                valueDocType: valueDocType
+
+                                txtCertType: txtCertType,
+                                valueCertType: valueCertType
                             });
                         }
                     } else {
                         this.$Message.error(rsp.error.message);
                     }
+                }).catch(err => {
+                    this.$Message.error(err.message);
+
                 });
             },
 
             onAdd() {
                 this.showDialog = true;
-                this.$refs.frmAddOrEditDoc.resetForm(this.projectId, this.projectNo, this.applicationId, this
+                this.$refs.frmAddOrEditCert.resetForm(this.projectId, this.projectNo, this.applicationId, this
                     .applicationNo);
             },
             onEdit(currentRow, index) {
                 if (!currentRow) {
                     this.$Message.warning("请选择需要操作的行");
                 } else {
-                    this.$refs.frmAddOrEditDoc.editForm(currentRow);
+                    this.$refs.frmAddOrEditCert.editForm(currentRow);
                     this.showDialog = true;
                 }
             },
@@ -217,7 +221,7 @@
                         content: "确定删除该记录?",
                         onOk: () => {
                             Server.delete({
-                                url: services.data.documents + "/" + currentRow.id
+                                url: services.data.certs + "/" + currentRow.id
                             }).then(rsp => {
                                 if (rsp.success == true) {
                                     this.$Message.success("删除成功");
@@ -234,31 +238,29 @@
 
             onDownload(currentRow, index) {
                 if (!currentRow) {
-                    this.$Message.warning("请选择需要下载的文档");
+                    this.$Message.warning("请选择需要下载的书证");
                 } else {
                     Server.getDownloadFile({
-                        url: services.data.documents + "/" + currentRow.id + "/download",
+                        url: services.data.certs + "/" + currentRow.id + "/pdf",
                         fileName: currentRow.fileName
                     })
                 }
             },
 
             onSave() {
-                this.$refs.frmAddOrEditDoc.$refs['frmData'].validate((valid) => {
+                this.$refs.frmAddOrEditCert.$refs['frmData'].validate((valid) => {
                     if (valid) {
-                        let form = this.$refs.frmAddOrEditDoc.getForm();
+                        let form = this.$refs.frmAddOrEditCert.getForm();
+                        debugger;
 
                         if (!form.id || form.id < 0) {
-                            if (form.file == null) {
-                                this.$Message.error("请选择上传文档！");
-                            }
 
-                            Server.postFormData({
-                                url: services.data.documents,
+                            Server.postJSON({
+                                url: services.data.certs,
                                 // params: JSON.stringify(form),
                                 params: form,
                                 headers: {
-                                    'Content-Type': "multipart/form-data; boundary=----WebKitFormBoundaryA9c9Q76jJjZPGe6M"
+                                    'Content-Type': "application/json-patch+json"
                                 }
                             }).then(rsp => {
                                 if (rsp.success === true) {
@@ -270,67 +272,23 @@
                                 }
                             });
                         } else {
-                            var arrSrv = [];
-
-                            arrSrv.push(
-                                new Promise((resolve, reject) => {
-                                    Server.putFormData({
-                                        url: services.data.documents,
-                                        params: form,
-                                        headers: {
-                                            'Content-Type': "application/json-patch+json"
-                                        }
-                                    }).then(rsp => {
-                                        if (rsp.success === true) {
-                                            // this.$Message.success("操作成功");
-                                            // this.loadTable();
-                                            // this.showDialog = false;
-                                            resolve(true);
-                                        } else {
-                                            this.$Message.error(rsp.error.message);
-                                            reject("更新文档信息失败！");
-                                        }
-                                    }).catch((error) => {
-                                        reject(error);
-                                    });
-                                })
-                            );
-
-                            if (form.file) {
-                                arrSrv.push(
-                                    new Promise((resolve, reject) => {
-                                        Server.putFormData({
-                                            url: services.data.documents + "/" + form.id + "/upload",
-                                            params: form,
-                                            headers: {
-                                                'Content-Type': "multipart/form-data; boundary=----WebKitFormBoundarysookc1NholMxd9OM"
-                                            }
-                                        }).then(rsp => {
-                                            if (rsp.success === true) {
-                                                // this.$Message.success("操作成功");
-                                                // this.loadTable();
-                                                // this.showDialog = false;
-                                                resolve(true);
-                                            } else {
-                                                this.$Message.error(rsp.error.message);
-                                                reject("更新文档失败！");
-                                            }
-                                        }).catch((error) => {
-                                            reject(error);
-                                        });
-                                    })
-                                );
-                            }
-
-                            Promise.all(arrSrv).then(r => {
-
-                                this.$Message.success("操作成功");
-                                this.loadTable();
-                                this.showDialog = false;
-
-                            }).catch((error) => {
-                                console.log(error)
-                            })
+                            Server.putJSON({
+                                url: services.data.certs,
+                                params: form,
+                                headers: {
+                                    'Content-Type': "application/json-patch+json"
+                                }
+                            }).then(rsp => {
+                                if (rsp.success === true) {
+                                    this.$Message.success("操作成功");
+                                    this.loadTable();
+                                    this.showDialog = false;
+                                } else {
+                                    this.$Message.error(rsp.error.message);
+                                }
+                            }).catch(err => {
+                                this.$Message.error(err.message);
+                            });
                         }
                     }
                 })

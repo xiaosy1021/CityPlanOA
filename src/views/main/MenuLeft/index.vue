@@ -11,7 +11,7 @@
       <MenuItem name="1-3" :to="`/data/Application`">申请信息</MenuItem>
       <MenuItem name="1-4" :to="`/data/Company`">单位信息</MenuItem>
     </Submenu>
-    <Submenu name="8">
+    <!-- <Submenu name="8">
       <template slot="title">
         <Icon type="md-settings" />
         系统管理
@@ -19,7 +19,7 @@
       <MenuItem name="8-1" :to="`/base/userManage`">用户信息</MenuItem>
       <MenuItem name="8-2" :to="`/base/roleManage`">角色信息</MenuItem>
       <MenuItem name="8-3" :to="`/base/userPermission`">权限控制</MenuItem>
-    </Submenu>
+    </Submenu> -->
   </Menu>
 
 </template>

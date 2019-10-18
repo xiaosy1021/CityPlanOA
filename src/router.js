@@ -105,52 +105,52 @@ const router =  new Router({
               import('@/views/data/Company/index.vue')
           }]
         },
-        {
-          path: '/base',
-          meta: {
-            name: '系统管理',
-            menuKey: '8',
-            auth: true
-          },
-          component: () =>
-            import('@/views/base/index.vue'),
-          children: [{
-              path: '/',
-              meta: {
-                auth: true
-              },
-              redirect: "/base/userManage",
-            },
-            {
-              path: '/base/userManage',
-              meta: {
-                name: '用户信息',
-                menuKey: '8-1',
-                auth: true
-              },
-              component: resolve => require(["@/views/base/userManage/index.vue"], resolve)
-            },
-            {
-              path: '/base/roleManage',
-              meta: {
-                name: '角色信息',
-                menuKey: '8-2',
-                auth: true
-              },
-              component: resolve => require(["@/views/base/roleManage/index.vue"], resolve)
-            },
-            {
-              path: '/base/userPermission',
-              meta: {
-                name: '权限控制',
-                menuKey: '8-3',
-                auth: true
-              },
-              component: () =>
-                import('@/views/base/userPermission/index.vue')
-            },
-          ]
-        },
+        // {
+        //   path: '/base',
+        //   meta: {
+        //     name: '系统管理',
+        //     menuKey: '8',
+        //     auth: true
+        //   },
+        //   component: () =>
+        //     import('@/views/base/index.vue'),
+        //   children: [{
+        //       path: '/',
+        //       meta: {
+        //         auth: true
+        //       },
+        //       redirect: "/base/userManage",
+        //     },
+        //     {
+        //       path: '/base/userManage',
+        //       meta: {
+        //         name: '用户信息',
+        //         menuKey: '8-1',
+        //         auth: true
+        //       },
+        //       component: resolve => require(["@/views/base/userManage/index.vue"], resolve)
+        //     },
+        //     {
+        //       path: '/base/roleManage',
+        //       meta: {
+        //         name: '角色信息',
+        //         menuKey: '8-2',
+        //         auth: true
+        //       },
+        //       component: resolve => require(["@/views/base/roleManage/index.vue"], resolve)
+        //     },
+        //     {
+        //       path: '/base/userPermission',
+        //       meta: {
+        //         name: '权限控制',
+        //         menuKey: '8-3',
+        //         auth: true
+        //       },
+        //       component: () =>
+        //         import('@/views/base/userPermission/index.vue')
+        //     },
+        //   ]
+        // },
       ]
     }
   ]

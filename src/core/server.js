@@ -67,9 +67,9 @@ export default class Server {
           resolve(rsp.data);
         }).catch(err => {
           reject({
-            netStatus: err.status,
+            netStatus: err.response.status,
             status: 0,
-            message: "请求超时"
+            message:err.response.data.error.message? err.response.data.error.message:"请求超时"
           });
         });
     });
@@ -112,9 +112,9 @@ export default class Server {
           resolve(rsp.data);
         }).catch(err => {
           reject({
-            netStatus: err.status,
+            netStatus: err.response.status,
             status: 0,
-            message: "请求超时"
+            message:err.response.data.error.message? err.response.data.error.message:"请求超时"
           });
         });
     });

@@ -145,8 +145,8 @@
                     fileName: this.form.fileName,
                     remark: this.form.remark,
 
-                    docTypeCode: this.valueDocType.length > 2 ? this.valueDocType[this.valueDocType.length - 2] : "",
-                    docSubTypeCode: this.valueDocType.length > 1 ? this.valueDocType[this.valueDocType.length - 1] : "",
+                    docTypeCode: this.valueDocType.length > 1 ? this.valueDocType[this.valueDocType.length - 2] : "",
+                    docSubTypeCode: this.valueDocType.length > 0 ? this.valueDocType[this.valueDocType.length - 1] : "",
                     file: this.form.file
                 };
 

@@ -88,7 +88,8 @@
       </TabPane>
 
       <TabPane label="相关书证">
-
+        <RelatedCertForm :projectId="form.projectId" :projectNo="form.projectNo" :applicationId="form.id"
+          :applicationNo="form.applicationNo" v-show="isEdit==true"></RelatedCertForm>
       </TabPane>
 
       <TabPane label="相关文档">
@@ -116,11 +117,13 @@
     treeDicHelper
   } from "@/core/TreeDictionary";
   import RelatedDocForm from "./RelatedDocForm.vue";
+  import RelatedCertForm from "./RelatedCertForm.vue";
 
   export default {
     mixins: [routerparams],
     components: {
-      RelatedDocForm
+      RelatedDocForm,
+      RelatedCertForm
     },
     data() {
       return {

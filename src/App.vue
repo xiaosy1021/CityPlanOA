@@ -7,6 +7,7 @@
 </style>
 
 <script>
+  import "@/core/utils/prototype";
   import {
     mapGetters
   } from 'vuex';

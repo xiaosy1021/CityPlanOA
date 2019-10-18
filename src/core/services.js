@@ -15,6 +15,7 @@ export const services = {
     project:`http://${SrvIP}/projects`,
     application:`http://${SrvIP}/applications`,
     documents:`http://${SrvIP}/documents`,
+    certs:`http://${SrvIP}/certs`,
   },
 
   dictionary:{
