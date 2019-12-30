@@ -84,7 +84,7 @@
             {
               title: "项目名称",
               key: "name",
-              width: 150,
+              width: 180,
               sortable: true,
               align: "center"
             },
@@ -92,6 +92,12 @@
               title: "项目号",
               key: "projectNo",
               width: 120,
+              align: "center"
+            },
+            {
+              title: "所属项目集",
+              key: "projectRootNo",
+              width: 180,
               align: "center"
             },
             {
@@ -199,7 +205,7 @@
       loadTable() {
         this.isLoading = true;
         let projectName = this.searchProjectName;
-        let projectType = this.searchProjectType=="all"?"":this.searchProjectType;
+        let projectType = this.searchProjectType == "all" ? "" : this.searchProjectType;
         let pageIndex = this.pageIndex;
         let pageSize = this.pageSize;
 
@@ -223,6 +229,8 @@
                 id: item.id,
                 name: item.name,
                 projectNo: item.projectNo,
+                projectRootId: item.projectRootId,
+                projectRootNo: item.projectRootNo,
                 location: item.location,
                 content: item.content,
                 projectTypeCode: item.projectTypeCode,
@@ -231,12 +239,13 @@
                 projectSubTypeName: projSubTypeName,
                 ownerCompanyId: item.ownerCompany.id,
                 ownerCompanyName: item.ownerCompany.name,
-                ownerCompany : item.ownerCompany,
+                ownerCompany: item.ownerCompany,
                 constructionCompanyId: item.constructionCompany.id,
                 constructionCompanyName: item.constructionCompany.name,
                 constructionCompany: item.constructionCompany,
                 landusageCode: item.landusageCode,
-                landusage: item.landusage
+                landusage: item.landusage,
+                landArea: item.landArea
               });
             }
 
@@ -311,6 +320,29 @@
           if (valid) {
             let form = this.$refs.frmAddOrEdit.getForm();
 
+            debugger;
+
+            if (!form.projectTypeCode || !form.projectSubTypeCode) {
+              this.$Message.error("请选择项目类型");
+              return;
+            }
+            if (!form.projectRootId || !form.projectRootNo) {
+              this.$Message.error("请选择项目集");
+              return;
+            }
+            if (!form.landusageCode || !form.landusage) {
+              this.$Message.error("请选择用地性质");
+              return;
+            }
+            if (!form.constructionCompanyId || form.constructionCompanyId == -1) {
+              this.$Message.error("请选择建设单位");
+              return;
+            }
+            if (!form.ownerCompanyId || form.ownerCompanyId == -1) {
+              this.$Message.error("请选择产权单位");
+              return;
+            }
+
             if (!form.id || form.id < 0) {
               Server.postJSON({
                 url: services.data.project,
@@ -326,6 +358,8 @@
                 } else {
                   this.$Message.error(rsp.error.message);
                 }
+              }).catch(err => {
+                this.$Message.error(err.message);
               });
             } else {
               Server.putJSON({
@@ -342,6 +376,8 @@
                 } else {
                   this.$Message.error(rsp.error.message);
                 }
+              }).catch(err => {
+                this.$Message.error(err.message);
               });
             }
           }

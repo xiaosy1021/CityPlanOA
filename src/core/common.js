@@ -89,12 +89,12 @@ export const renderHelper = {
     },
     //渲染默认的操作按钮，编辑+删除
     renderDefaultOpterForTable(h, params, editFunc, removeFunc) {
-        return h("div", [
-            h("i-button", {
+        var arrBtn =[];
+        if(editFunc){
+            arrBtn.push(h("i-button", {
                 props: {
                     shape: "circle",
                     icon: "ios-create"
-
                 },
                 domProps: {
                     title: "编辑"
@@ -107,8 +107,10 @@ export const renderHelper = {
                         editFunc(params.row, params.index);
                     }
                 }
-            }),
-            h("i-button", {
+            }))
+        }
+        if(removeFunc){
+            arrBtn.push(h("i-button", {
                 props: {
                     shape: "circle",
                     icon: "ios-trash"
@@ -124,8 +126,10 @@ export const renderHelper = {
                         removeFunc(params.row, params.index);
                     }
                 }
-            })
-        ]);
+            }));
+        }
+
+        return h("div",arrBtn);
     },
     //通过类控制树节点的选中效果
     clearNodeSelected(treeRef) {

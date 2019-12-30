@@ -189,7 +189,7 @@
 
         Server.get({
           url: services.data.application +
-            `?content=${content}&page=${pageIndex}&pageSize=${pageSize}`
+            `?content=${content}&IncludeProject=true&page=${pageIndex}&pageSize=${pageSize}`
         }).then(rsp => {
           this.isLoading = false;
           if (rsp.success === true) {
@@ -205,7 +205,7 @@
                 id: item.id,
                 projectId: item.projectId,
                 projectNo: item.projectNo,
-                projectName: '未返回...',
+                projectName: item.project && item.project.name?item.project.name:'未返回...',
                 applicationNo: item.applicationNo,
                 applicationTypeCode: item.applicationTypeCode,
                 applicationType: lblApplicationType,
@@ -303,6 +303,8 @@
                 } else {
                   this.$Message.error(rsp.error.message);
                 }
+              }).catch(err => {
+                this.$Message.error(err.message);
               });
             } else {
               Server.putJSON({
@@ -319,6 +321,8 @@
                 } else {
                   this.$Message.error(rsp.error.message);
                 }
+              }).catch(err => {
+                this.$Message.error(err.message);
               });
             }
           }

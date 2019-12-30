@@ -12,6 +12,7 @@ export const services = {
   },
   data:{
     company:`http://${SrvIP}/companies`,
+    projectset:`http://${SrvIP}/projectRoots`,
     project:`http://${SrvIP}/projects`,
     application:`http://${SrvIP}/applications`,
     documents:`http://${SrvIP}/documents`,

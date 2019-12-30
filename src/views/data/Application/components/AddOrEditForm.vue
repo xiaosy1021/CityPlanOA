@@ -1,8 +1,8 @@
 <template>
   <Form ref="frmData" :model="form" :rules="rules" :label-width="80">
 
-    <Tabs type="card">
-      <TabPane label="申请">
+    <Tabs type="card" :value="tabCurrent">
+      <TabPane label="申请" name="tabMain">
         <Row>
           <Col span="24">
           <!-- <FormItem label="项目名称:" prop="name"><Input v-model="form.name" placeholder="项目名称" /></FormItem> -->
@@ -50,11 +50,13 @@
               </Row>
               <Row>
                 <Col span="11">
-                <FormItem label="联系人:"><Input v-model="form.applicantCompanyContactor.name" placeholder="联系人" />
+                <FormItem label="联系人:"><Input v-model="form.applicantCompanyContactor.name" placeholder="联系人"
+                    disabled />
                 </FormItem>
                 </Col>
                 <Col span="11" offset="2">
-                <FormItem label="联系电话:"><Input v-model="form.applicantCompanyContactor.phone" placeholder="联系电话" />
+                <FormItem label="联系电话:"><Input v-model="form.applicantCompanyContactor.phone" placeholder="联系电话"
+                    disabled />
                 </FormItem>
                 </Col>
               </Row>
@@ -73,11 +75,12 @@
               </Row>
               <Row>
                 <Col span="11">
-                <FormItem label="联系人:"><Input v-model="form.designCompanyContactor.name" placeholder="联系人" />
+                <FormItem label="联系人:"><Input v-model="form.designCompanyContactor.name" placeholder="联系人" disabled />
                 </FormItem>
                 </Col>
                 <Col span="11" offset="2">
-                <FormItem label="联系电话:"><Input v-model="form.designCompanyContactor.phone" placeholder="联系电话" />
+                <FormItem label="联系电话:"><Input v-model="form.designCompanyContactor.phone" placeholder="联系电话"
+                    disabled />
                 </FormItem>
                 </Col>
               </Row>
@@ -87,12 +90,12 @@
 
       </TabPane>
 
-      <TabPane label="相关书证">
+      <TabPane label="相关书证" name="tabCert" :disabled="!isEdit">
         <RelatedCertForm :projectId="form.projectId" :projectNo="form.projectNo" :applicationId="form.id"
           :applicationNo="form.applicationNo" v-show="isEdit==true"></RelatedCertForm>
       </TabPane>
 
-      <TabPane label="相关文档">
+      <TabPane label="相关文档" name="tabDoc" :disabled="!isEdit">
         <RelatedDocForm :projectId="form.projectId" :projectNo="form.projectNo" :applicationId="form.id"
           :applicationNo="form.applicationNo" v-show="isEdit==true"></RelatedDocForm>
       </TabPane>
@@ -127,6 +130,8 @@
     },
     data() {
       return {
+        tabCurrent:"tabMain",
+
         allProject: [],
         allCompany: [],
 
@@ -243,22 +248,30 @@
 
       //重置表单
       resetForm() {
+        this.tabCurrent ="tabMain";
         this.valueApplicationType = [];
         this.isEdit = false;
 
         this.form.id = -1;
         this.form.projectId = -1;
-        this.form.projectNo = "",
-          this.form.applicationNo = "";
+        this.form.projectNo = "";
+        this.form.applicationNo = "";
         this.form.applicationTypeCode = "";
         this.form.content = "";
 
         this.form.designCompanyId = -1;
+        this.form.designCompanyContactor.name = "";
+        this.form.designCompanyContactor.phone = "";
+
         this.form.applicantCompanyId = -1;
+        this.form.applicantCompanyContactor.name = "";
+        this.form.applicantCompanyContactor.phone = "";
 
       },
       //编辑表单
       editForm(row) {
+        this.resetForm();
+
         this.valueApplicationType = [];
         this.isEdit = true;
 

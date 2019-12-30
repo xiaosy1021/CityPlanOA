@@ -80,6 +80,7 @@
             },
             //编辑表单
             editForm(row) {
+                this.resetForm();
                 this.form.id = row.id;
                 this.form.name = row.name;
                 this.form.companyNo = row.companyNo;

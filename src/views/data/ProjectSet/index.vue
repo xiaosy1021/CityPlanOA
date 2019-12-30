@@ -71,15 +71,8 @@
 
                         {
                             title: "项目集",
-                            key: "name",
-                            width: 150,
-                            sortable: true,
-                            align: "center"
-                        },
-                        {
-                            title: "父项目集",
-                            key: "companyNo",
-                            width: 120,
+                            key: "projectRootNo",
+                            width: 300,
                             sortable: true,
                             align: "center"
                         },
@@ -93,7 +86,8 @@
                                 return renderHelper.renderDefaultOpterForTable(
                                     h,
                                     params,
-                                    this.onEdit,
+                                    // this.onEdit,
+                                    null,
                                     this.onDelete
                                 );
                             },
@@ -145,20 +139,18 @@
                 let pageIndex = this.pageIndex;
                 let pageSize = this.pageSize;
 
-                this.$Message.error('暂无接口');
-
-                // Server.get({
-                //     url: services.data.company +
-                //         `?name=${companyName}&CompanyNo=${companyCode}&page=${pageIndex}&pageSize=${pageSize}`
-                // }).then(rsp => {
-                //     this.isLoading = false;
-                //     if (rsp.success === true) {
-                //         this.table.data = rsp.result.items;
-                //         this.total = rsp.result.totalCount;
-                //     } else {
-                //         this.$Message.error(rsp.error.message);
-                //     }
-                // });
+                Server.get({
+                    url: services.data.projectset +
+                        `?ProjectRootNo=${projectSetNo}&page=${pageIndex}&pageSize=${pageSize}`
+                }).then(rsp => {
+                    this.isLoading = false;
+                    if (rsp.success === true) {
+                        this.table.data = rsp.result.items;
+                        this.total = rsp.result.totalCount;
+                    } else {
+                        this.$Message.error(rsp.error.message);
+                    }
+                });
             },
             //刷新
             onRefresh() {
@@ -193,16 +185,16 @@
                         title: "提示",
                         content: "确定删除该记录?",
                         onOk: () => {
-                            // Server.delete({
-                            //     url: services.data.company + "/" + currentRow.id
-                            // }).then(rsp => {
-                            //     if (rsp.success == true) {
-                            //         this.$Message.success("删除成功");
-                            //         this.onRefresh();
-                            //     } else {
-                            //         this.$Message.error(rsp.message);
-                            //     }
-                            // });
+                            Server.delete({
+                                url: services.data.projectset + "/" + currentRow.id
+                            }).then(rsp => {
+                                if (rsp.success == true) {
+                                    this.$Message.success("删除成功");
+                                    this.onRefresh();
+                                } else {
+                                    this.$Message.error(rsp.error.message);
+                                }
+                            });
                         },
                         onCancel: () => {}
                     });
@@ -220,26 +212,49 @@
             },
             //保存
             onSave() {
-                // this.$refs.frmAddOrEdit.$refs['frmData'].validate((valid) => {
-                //     if (valid) {
-                //         let form = this.$refs.frmAddOrEdit.getForm();
-                //         Server.postJSON({
-                //             url: services.data.projectSet,
-                //             params: JSON.stringify(form),
-                //             headers: {
-                //                 'Content-Type': "application/json-patch+json"
-                //             }
-                //         }).then(rsp => {
-                //             if (rsp.success === true) {
-                //                 this.$Message.success("操作成功");
-                //                 this.onRefresh();
-                //                 this.showDialog = false;
-                //             } else {
-                //                 this.$Message.error(rsp.message);
-                //             }
-                //         });
-                //     }
-                // })
+                this.$refs.frmAddOrEdit.$refs['frmData'].validate((valid) => {
+                    if (valid) {
+                        let form = this.$refs.frmAddOrEdit.getForm();
+
+                        if (!form.id || form.id < 0) {
+                            Server.postJSON({
+                                url: services.data.projectset,
+                                params: JSON.stringify(form),
+                                headers: {
+                                    'Content-Type': "application/json-patch+json"
+                                }
+                            }).then(rsp => {
+                                if (rsp.success === true) {
+                                    this.$Message.success("操作成功");
+                                    this.onRefresh();
+                                    this.showDialog = false;
+                                } else {
+                                    this.$Message.error(rsp.error.message);
+                                }
+                            }).catch(err => {
+                                this.$Message.error(err.message);
+                            });
+                        } else {
+                            Server.putJSON({
+                                url: services.data.projectset,
+                                params: JSON.stringify(form),
+                                headers: {
+                                    'Content-Type': "application/json-patch+json"
+                                }
+                            }).then(rsp => {
+                                if (rsp.success === true) {
+                                    this.$Message.success("操作成功");
+                                    this.onRefresh();
+                                    this.showDialog = false;
+                                } else {
+                                    this.$Message.error(rsp.error.message);
+                                }
+                            }).catch(err => {
+                                this.$Message.error(err.message);
+                            });
+                        }
+                    }
+                })
             },
 
             //取消
