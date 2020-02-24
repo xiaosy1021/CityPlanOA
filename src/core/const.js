@@ -17,7 +17,7 @@
 var _CONSTCFG = {
     AppId: "SX_KJXX",
     IP: "122.193.33.86:8006",
-    SrvIP: "192.168.84.124:8098",
+    SrvIP: "192.168.84.124:5088",
 
     //字典
     DataDictionary: [],

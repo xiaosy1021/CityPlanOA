@@ -199,7 +199,7 @@
               });
             }
           } else {
-            this.$Message.error(rsp.error.message);
+            this.$Message.error("加载所有项目异常："+rsp.error.message);
           }
         });
       },
@@ -221,7 +221,7 @@
               });
             }
           } else {
-            this.$Message.error(rsp.error.message);
+            this.$Message.error("加载所有单位异常："+rsp.error.message);
           }
         });
       },

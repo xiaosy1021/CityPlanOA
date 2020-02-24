@@ -18,10 +18,14 @@ export const services = {
     documents:`http://${SrvIP}/documents`,
     certs:`http://${SrvIP}/certs`,
   },
-
   dictionary:{
-    url:`http://192.168.84.124/OpenAuthForQinzhou/API/AuthQuery/GetDataDictionary`,
+    all:`http://${SrvIP}/datadictionary/subitems`,
   },
+
+  // dictionary:{
+  //   url:`http://192.168.84.124/OpenAuthForQinzhou/API/AuthQuery/GetDataDictionary`,
+  //   url:`http://192.168.122.17:8944/API/AuthQuery/AllowedDataDictionary?roles=SkorubaIdentityAdminAdministrator&appKey=guihuaoa_xuzhou`,
+  // },
 
 
 

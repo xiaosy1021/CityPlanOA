@@ -77,21 +77,21 @@
             {
               title: "项目号",
               key: "projectNo",
-              width: 120,
-              sortable: true,
-              align: "center"
-            },
-            {
-              title: "项目名称",
-              key: "projectName",
               width: 150,
               sortable: true,
               align: "center"
             },
+            // {
+            //   title: "项目名称",
+            //   key: "projectName",
+            //   width: 150,
+            //   sortable: true,
+            //   align: "center"
+            // },
             {
               title: "申请号",
               key: "applicationNo",
-              width: 120,
+              width: 150,
               sortable: true,
               align: "center"
             },
@@ -105,21 +105,21 @@
             {
               title: "申请单位",
               key: "applicationCompanyName",
-              width: 150,
+              width: 180,
               sortable: true,
               align: "center"
             },
             {
               title: "设计单位",
               key: "designCompanyName",
-              width: 150,
+              width: 180,
               sortable: true,
               align: "center"
             },
             {
               title: "申请内容",
               key: "content",
-              width: 390,
+              width: 420,
               sortable: true,
               align: "center"
             },
@@ -205,7 +205,7 @@
                 id: item.id,
                 projectId: item.projectId,
                 projectNo: item.projectNo,
-                projectName: item.project && item.project.name?item.project.name:'未返回...',
+                // projectName: item.project && item.project.name?item.project.name:'未返回...',
                 applicationNo: item.applicationNo,
                 applicationTypeCode: item.applicationTypeCode,
                 applicationType: lblApplicationType,

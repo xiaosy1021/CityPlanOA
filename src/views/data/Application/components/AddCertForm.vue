@@ -149,7 +149,7 @@
 
                     issuedDate: new Date(this.form.issuedDate).Format("yyyy-MM-dd hh:mm:ss"),
 
-                    discriminator: certType,
+                    // discriminator: 'testA',
                 };
                 debugger;
 

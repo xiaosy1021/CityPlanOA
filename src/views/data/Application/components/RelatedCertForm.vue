@@ -162,14 +162,15 @@
                     url: services.data.application + `/` + this.applicationId + `/certs`
                 }).then(rsp => {
                     this.isLoading = false;
+                    debugger;
                     if (rsp.success === true) {
                         this.table.data = [];
                         for (var i = 0; i < rsp.result.length; i++) {
                             var item = rsp.result[i];
 
-                            var valueCertType = treeDicHelper.getArrValueByRSearchTree(item.discriminator,
+                            var valueCertType = treeDicHelper.getArrValueByRSearchTree(item.certType,
                                 '1110000-0');
-                            var txtCertType = treeDicHelper.getDisplayByRSearchTree(item.discriminator,
+                            var txtCertType = treeDicHelper.getDisplayByRSearchTree(item.certType,
                                 '1110000-0');
 
 
@@ -190,10 +191,10 @@
                             });
                         }
                     } else {
-                        this.$Message.error(rsp.error.message);
+                        this.$Message.error("加载申请相关书证异常："+rsp.error.message);
                     }
                 }).catch(err => {
-                    this.$Message.error(err.message);
+                    this.$Message.error("加载申请相关书证异常："+err.message);
 
                 });
             },

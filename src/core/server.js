@@ -66,6 +66,7 @@ export default class Server {
           rsp.data.netStatus = rsp.status;
           resolve(rsp.data);
         }).catch(err => {
+          debugger;
           reject({
             netStatus: err.response.status,
             status: 0,

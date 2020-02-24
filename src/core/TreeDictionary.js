@@ -11,7 +11,7 @@ export const treeDicHelper = {
         var arrMatch = [];
         this.treeRSearch(arrMatch, leafNodeCode, topNodeCode);
         for (var j = arrMatch.length - 1; j >= 0; j--) {
-            arrValue.push(arrMatch[j].Code)
+            arrValue.push(arrMatch[j].code)
         }
 
         return arrValue;
@@ -21,7 +21,7 @@ export const treeDicHelper = {
         var arrMatch = [];
         this.treeRSearch(arrMatch, leafNodeCode, topNodeCode);
         for (var j = arrMatch.length - 1; j >= 0; j--) {
-            txtDisplay += arrMatch[j].DisplayText;
+            txtDisplay += arrMatch[j].displayText;
             if (j > 0) {
                 txtDisplay += " / ";
             }
@@ -31,11 +31,11 @@ export const treeDicHelper = {
     },
 
     treeRSearch(arrMatch, childNodeCode, topNodeCode) {
-        var node = CONSTCFG.DataDictionary.find(p => p.Code == childNodeCode);
+        var node = CONSTCFG.DataDictionary.find(p => p.code == childNodeCode);
         if (node) {
             arrMatch.push(node);
-            if (node.ParentCode !== topNodeCode) {
-                this.treeRSearch(arrMatch, node.ParentCode, topNodeCode);
+            if (node.parentCode !== topNodeCode) {
+                this.treeRSearch(arrMatch, node.parentCode, topNodeCode);
             }
         }
     },
