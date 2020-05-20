@@ -166,6 +166,7 @@
                     if (rsp.success === true) {
                         this.table.data = [];
                         for (var i = 0; i < rsp.result.length; i++) {
+                            debugger;
                             var item = rsp.result[i];
 
                             var valueDocType = treeDicHelper.getArrValueByRSearchTree(item.docSubTypeCode,

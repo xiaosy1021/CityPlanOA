@@ -26,6 +26,7 @@ export default class Server {
     return new Promise((resolve, reject) => {
       this.setInitAxios();
       Axios.get(encodeURI(opt.url), {
+        responseType:'blob',
         params: opt.params || {}
       }).then(function (rsp) {
         if (rsp.data != "") {

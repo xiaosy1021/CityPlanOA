@@ -74,9 +74,7 @@
             CONSTCFG.DataLandusage = [];
 
             CONSTCFG.DataDictionary = rsp.result;
-            console.log("App.vue 赋值 CONSTCFG.DataDictionary");
-            console.log(CONSTCFG.DataDictionary);
-            
+
             this.dataDictionary = rsp.result;
 
             this.dataDictionary.forEach(p => {
@@ -86,7 +84,6 @@
               this.getCertTypeTree(p);
               this.getApplicationTypeTree(p);
             });
-
           } else {
             this.$Message.error("获取字典信息失败！");
           }

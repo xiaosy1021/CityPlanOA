@@ -174,8 +174,6 @@
                                 '1110000-0');
 
 
-
-
                             this.table.data.push({
                                 id: item.id,
                                 projectId: item.projectId,
