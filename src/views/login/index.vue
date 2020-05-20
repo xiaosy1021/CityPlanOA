@@ -2,24 +2,14 @@
   <div class="login-user">
     <div class="title">
       <h2>
-        <img
-          style="width:45px;vertical-align:middle"
-          src="@/assets/img/logo/logo_sipsd_blue.png"
-        />
+        <img style="width:45px;vertical-align:middle" src="@/assets/img/logo/logo_sipsd_blue.png" />
         徐州经济技术开发区规划办文系统
       </h2>
     </div>
     <div class="content">
-      <Form ref="frmLogin"
-        :model="user"
-        :rules="rules"
-      >
+      <Form ref="frmLogin" :model="user" :rules="rules">
         <FormItem prop="userAccount">
-          <Input
-            size="large"
-            v-model="user.userAccount"
-            placeholder="请输入账号"
-          />
+          <Input size="large" v-model="user.userAccount" placeholder="请输入账号" />
         </FormItem>
         <FormItem prop="userPwd">
           <Input

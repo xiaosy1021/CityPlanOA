@@ -5,29 +5,13 @@ import store from './store'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css';
 import '@/assets/css/main.less';
+import "./core/utils/pubsub"
 Vue.config.productionTip = false
 Vue.use(iView, {
   transfer: true
 })
 router.beforeEach((to, from, next) => {
-  // var auth = to.meta.auth || null;
-  // if (auth === true) {
-  //   debugger;
-  //   var isLogin = sessionStorage.getItem("userInfo") || null;
-  //   if (isLogin === null) {
-  //     next({
-  //       path: '/login'
-  //     });
-  //     return;
-  //   } else {
-  //     next()
-  //   }
-  // } else {
-  //   next()
-  // }
   next();
-
-
   //选中一级菜单
   if (to.matched[1] && to.matched[1].meta.menuKey) {
     store.commit("setMainMenuKey", to.matched[1].meta.menuKey);

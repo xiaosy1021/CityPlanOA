@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import Server from "@/core/server";
+import { mapActions } from 'vuex'
 import {
     services
 } from "@/core/services";
@@ -29,6 +30,7 @@ export const login = {
         };
     },
     methods: {
+        ...mapActions("oidcStore", ["authenticateOidcSilent"]),
         checkLogin(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
@@ -39,29 +41,31 @@ export const login = {
 
         login() {
             this.loading = true;
-            Server.post({
-                url: services.sys.login,
-                params: {
-                    username: this.user.userAccount,
-                    pwd: this.user.userPwd
-                }
-            }).then(rsp => {
-                if (rsp.status === 1) {
-                    // this.$Message.success("登录成功");
-                    sessionStorage.setItem("userInfo", JSON.stringify(rsp.data.userInfo));
+            // Server.post({
+            //     url: services.sys.login,
+            //     params: {
+            //         username: this.user.userAccount,
+            //         password: this.user.userPwd,
+            //         button:"login",
+            //         rememberLogin:"false",
+            //     }
+            // }).then(rsp => {
+            //     if (rsp.status === 1) {
+            //         // this.$Message.success("登录成功");
+            //         sessionStorage.setItem("userInfo", JSON.stringify(rsp.data.userInfo));
 
-                    // var aaa = JSON.parse(sessionStorage.getItem("userInfo"));
-                    // console.log(aaa);
+            //         // var aaa = JSON.parse(sessionStorage.getItem("userInfo"));
+            //         // console.log(aaa);
 
-                    this.$router.push({
-                        // path: `/main/${this.user.ip}/${this.user.appid}`
-                        path: `/main`
-                    });
+            //         this.$router.push({
+            //             // path: `/main/${this.user.ip}/${this.user.appid}`
+            //             path: `/main`
+            //         });
 
-                } else {
-                    this.$Message.error(rsp.message);
-                }
-            });
+            //     } else {
+            //         this.$Message.error(rsp.message);
+            //     }
+            // });
         }
     }
 };

@@ -4,10 +4,10 @@ import {
   debug
 } from "util";
 export default class Server {
-  static _getToken = null;
+  static _token = null;
 
-  static setToken(getToken) {
-    this._getToken = getToken;
+  static setToken(token) {
+    this._token = token;
   }
 
   static get(opt) {
@@ -26,14 +26,19 @@ export default class Server {
     return new Promise((resolve, reject) => {
       this.setInitAxios();
       Axios.get(encodeURI(opt.url), {
-        responseType:'blob',
-        params: opt.params || {}
+        responseType: 'blob',
+        params: opt.params || {},
+        headers: opt.headers || {}
       }).then(function (rsp) {
+        if(opt.callback){
+          opt.callback(rsp);
+          return;
+        }
         if (rsp.data != "") {
-          var url = window.URL.createObjectURL(new Blob([rsp.data]));
+          var url = window.URL.createObjectURL(rsp.data);
           var link = document.createElement('a');
           link.href = url;
-          link.setAttribute('download', opt.fileName||'');
+          link.setAttribute('download', opt.fileName || '');
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -61,17 +66,16 @@ export default class Server {
       this.setInitAxios();
 
       Axios.post(encodeURI(opt.url), opt.params || {}, {
-          headers: opt.headers || {}
-        })
+        headers: opt.headers || {}
+      })
         .then(function (rsp) {
           rsp.data.netStatus = rsp.status;
           resolve(rsp.data);
         }).catch(err => {
-          debugger;
           reject({
             netStatus: err.response.status,
             status: 0,
-            message:err.response.data.error.message? err.response.data.error.message:"请求超时"
+            message: err.response.data.error.message ? err.response.data.error.message : "请求超时"
           });
         });
     });
@@ -82,16 +86,15 @@ export default class Server {
     Object.keys(opt.params).forEach((key) => {
       formData.append(key, opt.params[key]);
     });
-
     return new Promise((resolve, reject) => {
       this.setInitAxios();
-
       Axios.post(encodeURI(opt.url), formData, {
-          headers: opt.headers || {}
-        })
+        headers: opt.headers || {},
+        timeout: opt.timeout || 5000,
+        responseType: 'blob'
+      })
         .then(function (rsp) {
-          rsp.data.netStatus = rsp.status;
-          resolve(rsp.data);
+          resolve(rsp);
         }).catch(err => {
           reject({
             netStatus: err.status,
@@ -107,8 +110,8 @@ export default class Server {
       this.setInitAxios();
 
       Axios.put(encodeURI(opt.url), opt.params || {}, {
-          headers: opt.headers || {}
-        })
+        headers: opt.headers || {}
+      })
         .then(function (rsp) {
           rsp.data.netStatus = rsp.status;
           resolve(rsp.data);
@@ -116,7 +119,7 @@ export default class Server {
           reject({
             netStatus: err.response.status,
             status: 0,
-            message:err.response.data.error.message? err.response.data.error.message:"请求超时"
+            message: err.response.data.error.message ? err.response.data.error.message : "请求超时"
           });
         });
     });
@@ -132,8 +135,8 @@ export default class Server {
       this.setInitAxios();
 
       Axios.put(encodeURI(opt.url), formData, {
-          headers: opt.headers || {}
-        })
+        headers: opt.headers || {}
+      })
         .then(function (rsp) {
           rsp.data.netStatus = rsp.status;
           resolve(rsp.data);
@@ -152,8 +155,8 @@ export default class Server {
       this.setInitAxios();
 
       Axios.delete(encodeURI(opt.url), opt.params || {}, {
-          headers: opt.headers || {}
-        })
+        headers: opt.headers || {}
+      })
         .then(function (rsp) {
           rsp.data.netStatus = rsp.status;
           resolve(rsp.data);
@@ -170,9 +173,8 @@ export default class Server {
 
 
   static setInitAxios(timeout) {
-    if (this._getToken !== null) {
-      const token = this._getToken()
-      Axios.defaults.headers.common['authorization'] = 'Bearer ' + token
+    if (this._token !== null) {
+      Axios.defaults.headers.common['authorization'] = 'Bearer ' + this._token
     }
 
     if (!timeout) {
@@ -180,6 +182,7 @@ export default class Server {
     } else {
       Axios.defaults.timeout = timeout;
     }
+
     Axios.interceptors.request.use(
       config => {
         return config;

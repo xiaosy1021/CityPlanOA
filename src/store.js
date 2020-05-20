@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { vuexOidcCreateStoreModule } from 'vuex-oidc'
 import env from './global'
+import router from './router'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -10,10 +11,10 @@ export default new Vuex.Store({
     currentSubKey: '1'
   },
   mutations: {
-    setMainMenuKey (state, key) {
+    setMainMenuKey(state, key) {
       state.currentMainKey = key;
     },
-    setSubMenuKey (state, key) {
+    setSubMenuKey(state, key) {
       state.currentSubKey = key;
     }
   },
@@ -28,12 +29,21 @@ export default new Vuex.Store({
         dispatchEventsOnWindow: true
       },
       {
-        userLoaded: (user) => console.log('OIDC user is loaded:', user),
-        userUnloaded: () => console.log('OIDC user is unloaded'),
+        userLoaded: (user) => {
+          console.log('OIDC user is loaded:', user);
+        },
+        userUnloaded: () => {
+          console.log('OIDC user is unloaded');
+        },
         accessTokenExpiring: () => console.log('Access token will expire'),
         accessTokenExpired: () => console.log('Access token did expire'),
         silentRenewError: () => console.log('OIDC user is unloaded'),
-        userSignedOut: () => console.log('OIDC user is signed out')
+        userSignedOut: () => {
+          // router.push({
+          //   path: "/login"
+          // });
+          console.log('OIDC user is signed out')
+        }
       })
   }
 })
